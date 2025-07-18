@@ -17,3 +17,6 @@ httpx
 black
 isort
 pre-commit
+langchain
+langchain-google-genai
+langchain-core

@@ -1,42 +1,35 @@
 import logging
 import sys
-from pathlib import Path
+from datetime import datetime
 
-def setup_logger(name: str, level: int = logging.INFO) -> logging.Logger:
+def setup_logging(level=logging.INFO):
     """
-    Set up a logger with both file and console handlers
+    Setup logging configuration for the application
+    
+    Args:
+        level: Logging level (default: INFO)
     """
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    
-    # Avoid adding multiple handlers if logger already exists
-    if logger.handlers:
-        return logger
-    
-    # Create formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+    # Configure root logger
+    logging.basicConfig(
+        level=level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            logging.FileHandler(f'logs/app_{datetime.now().strftime("%Y%m%d")}.log', mode='a')
+        ]
     )
     
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-    
-    # File handler
-    log_dir = Path("logs")
-    log_dir.mkdir(exist_ok=True)
-    
-    file_handler = logging.FileHandler(log_dir / f"{name}.log")
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-    
-    return logger
+    # Create logs directory if it doesn't exist
+    import os
+    os.makedirs('logs', exist_ok=True)
 
-# Application loggers
-app_logger = setup_logger("jobseeker")
-service_logger = setup_logger("services")
-api_logger = setup_logger("api")
+# Create service logger for services
+service_logger = logging.getLogger('app.services')
+service_logger.setLevel(logging.INFO)
+
+# Create handler if not already set
+if not service_logger.handlers:
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    service_logger.addHandler(handler)

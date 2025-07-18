@@ -4,6 +4,50 @@ import traceback
 import os
 from pathlib import Path
 
+def process_resume_file(file_path: str) -> dict:
+    """
+    Process a resume file and extract its text content
+    
+    Args:
+        file_path: Path to the resume file
+    
+    Returns:
+        dict: Dictionary containing processed content with 'content' key
+    """
+    service_logger.info(f"Processing resume file: {file_path}")
+    
+    try:
+        # Extract text from the file
+        extracted_text = extract_text_from_pdf(file_path)
+        
+        if not extracted_text:
+            service_logger.warning("No text content extracted from resume file")
+            return {
+                "content": "",
+                "status": "empty",
+                "message": "No text content found in the file"
+            }
+        
+        service_logger.info(f"Successfully processed resume file with {len(extracted_text)} characters")
+        
+        return {
+            "content": extracted_text,
+            "status": "success",
+            "message": f"Successfully extracted {len(extracted_text)} characters from resume",
+            "file_path": file_path
+        }
+        
+    except Exception as e:
+        service_logger.error(f"Error processing resume file {file_path}: {str(e)}")
+        service_logger.error(f"Traceback: {traceback.format_exc()}")
+        
+        return {
+            "content": "",
+            "status": "error",
+            "message": f"Error processing file: {str(e)}",
+            "file_path": file_path
+        }
+
 def extract_text_from_pdf(file_path: str) -> str:
     """
     Extract text content from PDF file
