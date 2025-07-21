@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const ResumeUpload = ({ onResumeUploaded, loading, setLoading }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -96,7 +97,7 @@ const ResumeUpload = ({ onResumeUploaded, loading, setLoading }) => {
       submitData.append('job_type', formData.job_type);
       submitData.append('remote_preference', formData.remote_preference);
 
-      const response = await fetch('http://localhost:8000/upload-resume', {
+      const response = await fetch(API_ENDPOINTS.uploadResume(), {
         method: 'POST',
         body: submitData,
       });

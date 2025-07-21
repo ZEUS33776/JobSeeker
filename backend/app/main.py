@@ -2,7 +2,7 @@ import asyncio
 import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import router
+from app.api.routers import main_router as router
 from app.core.logger import setup_logging
 import logging
 

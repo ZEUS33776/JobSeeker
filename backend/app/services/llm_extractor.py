@@ -768,13 +768,11 @@ def analyze_resume_vs_job_description(resume_text: str, resume_info: dict, job_d
         )
         parser = JsonOutputParser()
         
-        # Create comprehensive ATS analysis prompt
+        # Create comprehensive ATS analysis prompt using the advanced evaluation framework
         ats_analysis_prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are an expert ATS (Applicant Tracking System) consultant and resume optimization specialist. 
-            Your job is to provide comprehensive analysis comparing a resume against a specific job description, 
-            focusing on ATS compatibility, keyword matching, and optimization recommendations."""),
+            ("system", """You are an advanced Applicant Tracking System (ATS) resume evaluator designed to simulate how modern hiring systems analyze and score resumes for relevance, quality, and presentation. Your job is to evaluate resumes and provide detailed assessment of their effectiveness based on industry best practices."""),
             ("human", """
-**TASK**: Analyze this resume against the provided job description for ATS compatibility and match quality.
+**TASK**: Evaluate this resume against the provided job description for ATS compatibility and match quality.
 
 **RESUME CONTENT:**
 {resume_text}
@@ -787,29 +785,31 @@ def analyze_resume_vs_job_description(resume_text: str, resume_info: dict, job_d
 **JOB DESCRIPTION:**
 {job_description}
 
-**ANALYSIS REQUIREMENTS:**
+**EVALUATION CRITERIA:**
 
-Perform a comprehensive ATS analysis and provide detailed insights in the following areas:
+**Step 1: Job Description-Based Scoring (JD Provided)**
 
-1. **OVERALL MATCH SCORE** (0-100): Calculate based on keyword alignment, skill match, experience relevance
-2. **STRENGTHS**: What aspects of the resume align well with the job requirements
-3. **WEAKNESSES**: Areas where the resume falls short or lacks relevance
-4. **MISSING KEYWORDS**: Critical keywords from job description not found in resume
-5. **MISSING SKILLS**: Required/preferred skills mentioned in job but not in resume
-6. **ATS OPTIMIZATION**: Specific recommendations to improve ATS scanning
-7. **KEYWORD DENSITY**: Analysis of how well resume matches job keywords
-8. **EXPERIENCE ALIGNMENT**: How well experience level and background match requirements
-9. **ACTION ITEMS**: Specific steps to improve the resume for this position
+1. **Keyword Match (20% weight)**: Identify how well the resume incorporates keywords and phrases found in the job description, including tools, technologies, soft skills, and responsibilities.
 
-**ANALYSIS CRITERIA:**
-- Focus on exact keyword matches (case-insensitive)
-- Consider synonyms and related terms
-- Evaluate technical skills, soft skills, tools, and technologies
-- Assess experience level alignment
-- Check for industry-specific terminology
-- Consider required vs preferred qualifications
+2. **Skills Relevance (20% weight)**: Evaluate how the listed skills align with the required skills in the JD.
 
-**SCORING GUIDELINES:**
+3. **Job Title Match (15% weight)**: Determine how closely the candidate's previous job titles match the desired role.
+
+4. **Relevant Experience (15% weight)**: Assess whether the work experience demonstrates expertise in relevant areas, including total years of experience and recency.
+
+5. **Education Fit (10% weight)**: Determine whether the degree(s), field of study, and institution level meet or exceed the minimum educational qualifications.
+
+6. **Certifications (5% weight)**: Check if relevant industry certifications are present, particularly those mentioned in the JD.
+
+7. **Section Completeness (5% weight)**: Ensure essential sections are present — Contact Info, Summary, Work Experience, Skills, Education, Projects, and Certifications.
+
+8. **Resume Formatting (5% weight)**: Evaluate whether the resume is ATS-friendly — no tables, no multi-column layouts, minimal graphics, no header/footer content misuse.
+
+9. **Grammar & Clarity (3% weight)**: Identify any spelling or grammatical issues and check for clarity and professionalism in language.
+
+10. **Overall Presentation (2% weight)**: Consider layout readability, bullet point structure (action-oriented, achievement-focused), consistency in formatting, and effective use of space.
+
+**SCORING METHODOLOGY:**
 - **90-100%**: Excellent Fit - Resume closely matches most job requirements
 - **75-89%**: Very Good Fit - Strong match with minor gaps
 - **60-74%**: Good Fit - Decent match but needs improvement
@@ -823,6 +823,7 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
 - Evaluate experience level alignment
 - Consider industry/domain relevance
 - Factor in role title similarity
+- Weight each criterion appropriately
 
 **RESPONSE FORMAT (JSON only):**
 {{
@@ -830,22 +831,22 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
     "match_percentage": [SAME_AS_OVERALL_SCORE],
     "fit_level": "[excellent_fit|very_good_fit|good_fit|moderate_fit|poor_fit|not_a_fit]",
     "strengths": [
-        "List actual strengths found in resume that match job",
-        "Be specific about what aligns well"
+        "List specific strengths found in resume that align with job requirements",
+        "Be specific about what matches well and why"
     ],
     "weaknesses": [
-        "List actual gaps and mismatches found",
-        "Be specific about what's missing"
+        "List specific gaps and mismatches found",
+        "Be specific about what's missing or inadequate"
     ],
     "missing_keywords": [
-        "List actual keywords from job not found in resume"
+        "List critical keywords from job description not found in resume"
     ],
     "missing_skills": [
-        "List actual skills mentioned in job but not in resume"
+        "List required/preferred skills mentioned in job but not in resume"
     ],
     "ats_optimization": [
-        "Provide specific, actionable optimization tips",
-        "Based on actual analysis of resume vs job"
+        "Provide specific, actionable optimization tips for ATS scanning",
+        "Focus on formatting, keyword placement, and structure improvements"
     ],
     "keyword_analysis": {{
         "total_job_keywords": [COUNT_ACTUAL_KEYWORDS_IN_JOB],
@@ -858,18 +859,23 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
         "required_experience": "[Extract from job description]",
         "candidate_experience": "[Extract from resume]",
         "alignment_score": [CALCULATE_0_TO_100],
-        "notes": "Actual assessment of experience match"
+        "notes": "Detailed assessment of experience match"
     }},
     "action_items": [
         "List specific, actionable items based on actual analysis",
         "Focus on the most impactful changes for this specific job"
     ],
     "category_breakdown": {{
-        "technical_skills": [CALCULATE_0_TO_100],
-        "soft_skills": [CALCULATE_0_TO_100],
-        "experience_level": [CALCULATE_0_TO_100],
-        "education_requirements": [CALCULATE_0_TO_100],
-        "industry_knowledge": [CALCULATE_0_TO_100]
+        "keyword_match": [CALCULATE_0_TO_100],
+        "skills_relevance": [CALCULATE_0_TO_100],
+        "job_title_match": [CALCULATE_0_TO_100],
+        "experience_alignment": [CALCULATE_0_TO_100],
+        "education_fit": [CALCULATE_0_TO_100],
+        "certifications": [CALCULATE_0_TO_100],
+        "section_completeness": [CALCULATE_0_TO_100],
+        "resume_formatting": [CALCULATE_0_TO_100],
+        "grammar_clarity": [CALCULATE_0_TO_100],
+        "overall_presentation": [CALCULATE_0_TO_100]
     }},
     "recommendations": {{
         "high_priority": [
@@ -881,16 +887,18 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
         "low_priority": [
             "Nice-to-have improvements"
         ]
-    }}
+    }},
+    "evaluation_summary": "Brief summary of the overall assessment and key findings"
 }}
 
 **IMPORTANT SCORING RULES**: 
-- **NEVER use example scores (like 78, 85, etc.) - calculate actual scores**
+- **NEVER use example scores (like 78, 85, etc.) - calculate actual scores based on analysis**
 - **Count exact keyword matches** - if job mentions "Python" and resume has "Python", count it
 - **Be honest about gaps** - if major skills are missing, score should be lower
 - **Vary scores significantly** - different resumes should get very different scores
 - **Focus on role relevance** - wrong role type should get low scores
 - **Consider experience mismatch** - junior vs senior misalignment affects score
+- **Weight criteria appropriately** - keyword match and skills relevance are most important
 - Respond with ONLY the JSON, no other text""")
         ])
         
@@ -916,7 +924,8 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
             "resume_length": len(resume_text),
             "job_description_length": len(job_description),
             "resume_role": resume_info.get("Role", ""),
-            "skills_count": len(resume_info.get("Skills", []))
+            "skills_count": len(resume_info.get("Skills", [])),
+            "analysis_type": "job_description_based"
         }
         
         print(f"[ATS ANALYSIS] Completed with score: {analysis_result.get('overall_score', 'N/A')}")
@@ -944,6 +953,231 @@ Perform a comprehensive ATS analysis and provide detailed insights in the follow
             "experience_alignment": {
                 "alignment_score": 0,
                 "notes": "Analysis unavailable"
+            },
+            "action_items": ["Please try again or contact support"],
+            "error": True,
+            "error_message": str(e)
+        }
+
+def analyze_resume_standalone(resume_text: str, resume_info: dict) -> dict:
+    """
+    Comprehensive ATS analysis of resume against general best practices (no job description)
+    
+    Args:
+        resume_text: Raw resume text content
+        resume_info: Parsed resume information (role, skills, experience)
+    
+    Returns:
+        dict: Detailed analysis including strengths, weaknesses, ATS score
+    """
+    try:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        from langchain_core.prompts import ChatPromptTemplate
+        from langchain_core.output_parsers import JsonOutputParser
+        
+        # Initialize LLM and parser
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            temperature=0.1,
+            max_tokens=8000,
+            google_api_key=GEMINI_API_KEY
+        )
+        parser = JsonOutputParser()
+        
+        # Create comprehensive standalone ATS analysis prompt
+        standalone_analysis_prompt = ChatPromptTemplate.from_messages([
+            ("system", """You are an advanced Applicant Tracking System (ATS) resume evaluator designed to simulate how modern hiring systems analyze and score resumes for relevance, quality, and presentation. Your job is to evaluate resumes and provide detailed assessment of their effectiveness based on industry best practices."""),
+            ("human", """
+**TASK**: Evaluate this resume based on best practices and general expectations for strong resumes in technical and professional roles.
+
+**RESUME CONTENT:**
+{resume_text}
+
+**EXTRACTED RESUME INFO:**
+- Role: {resume_role}
+- Skills: {resume_skills}
+- Experience Level: {experience_level}
+
+**EVALUATION CRITERIA:**
+
+**Step 2: General Best Practices Evaluation (No JD Provided)**
+
+1. **ATS-Friendliness (25% weight)**: Ensure formatting avoids tables, columns, images, or other elements that might confuse parsing systems. Check for clean, parseable text structure.
+
+2. **Section Completeness (20% weight)**: Check for presence of all important sections — Contact Info, Summary, Work Experience, Education, Skills, and optional Projects/Certifications.
+
+3. **Grammar & Language (15% weight)**: Look for correct grammar, sentence structure, and use of professional language. Identify any spelling or grammatical issues.
+
+4. **Resume Length (10% weight)**: One page is ideal for entry-level candidates; 1–2 pages is acceptable for experienced professionals. Penalize unnecessarily long resumes.
+
+5. **Bullet Point Quality (10% weight)**: Assess whether bullet points begin with action verbs and communicate accomplishments clearly, ideally with measurable results.
+
+6. **Keyword Strength (10% weight)**: Look for presence of commonly expected tools, languages, and frameworks for the field (e.g., Python, Git, APIs, Agile, etc.).
+
+7. **Work Experience Quality (5% weight)**: Ensure that experience descriptions are relevant and well-written, with clear roles and responsibilities.
+
+8. **Timeline Consistency (3% weight)**: Ensure dates are chronologically sound, complete, and formatted uniformly.
+
+9. **Soft Skills Indicators (2% weight)**: Note presence of leadership, communication, teamwork, and problem-solving where applicable.
+
+10. **Design and Layout (2% weight)**: Ensure clean alignment, proper font size, spacing, and visual hierarchy.
+
+**SCORING METHODOLOGY:**
+- **90-100%**: Excellent Resume - Follows all best practices, highly ATS-friendly
+- **75-89%**: Very Good Resume - Strong adherence to best practices with minor issues
+- **60-74%**: Good Resume - Decent quality but needs some improvements
+- **40-59%**: Fair Resume - Some good elements but significant improvements needed
+- **20-39%**: Poor Resume - Major issues with formatting, content, or structure
+- **0-19%**: Very Poor Resume - Serious problems that need immediate attention
+
+**CALCULATE SCORES DYNAMICALLY:**
+- Assess ATS compatibility based on formatting and structure
+- Count essential sections present vs required
+- Evaluate grammar and language quality
+- Check resume length appropriateness
+- Assess bullet point effectiveness
+- Count relevant keywords for the field
+- Review experience description quality
+- Verify timeline consistency
+- Identify soft skills presence
+- Evaluate overall design and layout
+
+**RESPONSE FORMAT (JSON only):**
+{{
+    "overall_score": [CALCULATE_ACTUAL_SCORE_0_TO_100],
+    "ats_compatibility_score": [CALCULATE_0_TO_100],
+    "fit_level": "[excellent|very_good|good|fair|poor|very_poor]",
+    "strengths": [
+        "List specific strengths found in the resume",
+        "Be specific about what works well and why"
+    ],
+    "weaknesses": [
+        "List specific areas that need improvement",
+        "Be specific about what's missing or inadequate"
+    ],
+    "ats_optimization": [
+        "Provide specific, actionable optimization tips for ATS scanning",
+        "Focus on formatting, structure, and keyword improvements"
+    ],
+    "section_analysis": {{
+        "contact_info": "[present|missing|incomplete]",
+        "summary": "[present|missing|incomplete]",
+        "work_experience": "[present|missing|incomplete]",
+        "education": "[present|missing|incomplete]",
+        "skills": "[present|missing|incomplete]",
+        "projects": "[present|missing|incomplete]",
+        "certifications": "[present|missing|incomplete]"
+    }},
+
+    "content_analysis": {{
+        "grammar_quality": [CALCULATE_0_TO_100],
+        "bullet_point_quality": [CALCULATE_0_TO_100],
+        "keyword_density": [CALCULATE_0_TO_100],
+        "experience_quality": [CALCULATE_0_TO_100],
+        "timeline_consistency": [CALCULATE_0_TO_100],
+        "soft_skills_presence": [CALCULATE_0_TO_100]
+    }},
+    "action_items": [
+        "List specific, actionable items to improve the resume",
+        "Focus on the most impactful changes for general ATS compatibility"
+    ],
+    "category_breakdown": {{
+        "ats_friendliness": [CALCULATE_0_TO_100],
+        "section_completeness": [CALCULATE_0_TO_100],
+        "grammar_language": [CALCULATE_0_TO_100],
+        "resume_length": [CALCULATE_0_TO_100],
+        "bullet_point_quality": [CALCULATE_0_TO_100],
+        "keyword_strength": [CALCULATE_0_TO_100],
+        "work_experience_quality": [CALCULATE_0_TO_100],
+        "timeline_consistency": [CALCULATE_0_TO_100],
+        "soft_skills_indicators": [CALCULATE_0_TO_100],
+        "design_layout": [CALCULATE_0_TO_100]
+    }},
+    "recommendations": {{
+        "high_priority": [
+            "Most critical improvements for ATS compatibility"
+        ],
+        "medium_priority": [
+            "Important improvements for overall quality"
+        ],
+        "low_priority": [
+            "Nice-to-have improvements"
+        ]
+    }},
+    "evaluation_summary": "Brief summary of the overall assessment and key findings"
+}}
+
+**IMPORTANT SCORING RULES**: 
+- **NEVER use example scores (like 78, 85, etc.) - calculate actual scores based on analysis**
+- **Focus on ATS compatibility** - this is the most important factor for standalone evaluation
+- **Be honest about issues** - if there are major formatting problems, score should be lower
+- **Vary scores significantly** - different resumes should get very different scores
+- **Weight criteria appropriately** - ATS-friendliness and section completeness are most important
+- **Consider industry standards** - evaluate against expectations for the candidate's field
+- Respond with ONLY the JSON, no other text""")
+        ])
+        
+        # Create analysis chain
+        analysis_chain = standalone_analysis_prompt | llm | parser
+        
+        # Format skills for display
+        skills_text = ", ".join(resume_info.get("Skills", [])) if resume_info.get("Skills") else "None extracted"
+        
+        # Perform analysis
+        print(f"[STANDALONE ATS ANALYSIS] Starting comprehensive analysis...")
+        analysis_result = analysis_chain.invoke({
+            "resume_text": resume_text,
+            "resume_role": resume_info.get("Role", "Not specified"),
+            "resume_skills": skills_text,
+            "experience_level": resume_info.get("Experience", "Not specified")
+        })
+        
+        # Add metadata
+        analysis_result["analysis_metadata"] = {
+            "analyzed_at": str(datetime.now()),
+            "resume_length": len(resume_text),
+            "resume_role": resume_info.get("Role", ""),
+            "skills_count": len(resume_info.get("Skills", [])),
+            "analysis_type": "standalone_ats"
+        }
+        
+        print(f"[STANDALONE ATS ANALYSIS] Completed with score: {analysis_result.get('overall_score', 'N/A')}")
+        
+        return analysis_result
+        
+    except Exception as e:
+        print(f"[STANDALONE ATS ANALYSIS ERROR] {type(e).__name__}: {str(e)}")
+        # Return error structure
+        return {
+            "overall_score": 0,
+            "ats_compatibility_score": 0,
+            "strengths": [],
+            "weaknesses": [f"Analysis failed: {str(e)}"],
+            "ats_optimization": ["Unable to complete analysis due to technical error"],
+            "section_analysis": {
+                "contact_info": "unknown",
+                "summary": "unknown",
+                "work_experience": "unknown",
+                "education": "unknown",
+                "skills": "unknown",
+                "projects": "unknown",
+                "certifications": "unknown"
+            },
+            "formatting_analysis": {
+                "ats_friendly": False,
+                "uses_tables": False,
+                "uses_columns": False,
+                "has_images": False,
+                "clean_structure": False,
+                "proper_spacing": False
+            },
+            "content_analysis": {
+                "grammar_quality": 0,
+                "bullet_point_quality": 0,
+                "keyword_density": 0,
+                "experience_quality": 0,
+                "timeline_consistency": 0,
+                "soft_skills_presence": 0
             },
             "action_items": ["Please try again or contact support"],
             "error": True,

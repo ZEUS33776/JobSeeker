@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const JobSearch = ({ sessionData, onJobSearchCompleted, loading, setLoading }) => {
   const [additionalKeywords, setAdditionalKeywords] = useState('');
@@ -48,7 +49,7 @@ const JobSearch = ({ sessionData, onJobSearchCompleted, loading, setLoading }) =
       // Send updated skills list
       formData.append('updated_skills', JSON.stringify(editableSkills));
 
-      const response = await fetch('http://localhost:8000/search-jobs', {
+      const response = await fetch(API_ENDPOINTS.searchJobs(), {
         method: 'POST',
         body: formData,
       });
@@ -58,7 +59,17 @@ const JobSearch = ({ sessionData, onJobSearchCompleted, loading, setLoading }) =
       if (result.success) {
         onJobSearchCompleted(result.data);
       } else {
-        setErrors({ search: result.detail || 'Failed to search jobs. Please try again.' });
+        // Handle different error formats
+        let errorMessage = 'Failed to search jobs. Please try again.';
+        if (typeof result.detail === 'string') {
+          errorMessage = result.detail;
+        } else if (result.detail && Array.isArray(result.detail)) {
+          // Handle FastAPI validation errors
+          errorMessage = result.detail.map(err => `${err.loc?.join('.')}: ${err.msg}`).join(', ');
+        } else if (result.message) {
+          errorMessage = result.message;
+        }
+        setErrors({ search: errorMessage });
       }
     } catch (error) {
       console.error('Search error:', error);

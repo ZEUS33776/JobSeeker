@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const JobResults = ({ jobResults, sessionData, onBackToSearch, loading, setLoading }) => {
   const [expandedJobs, setExpandedJobs] = useState(new Set());
@@ -65,7 +66,7 @@ const JobResults = ({ jobResults, sessionData, onBackToSearch, loading, setLoadi
       formData.append('job_url', job.url);
       formData.append('session_id', sessionData.session_id);
 
-      const response = await fetch('http://localhost:8000/fetch-job-description', {
+      const response = await fetch(API_ENDPOINTS.fetchJobDescription(), {
         method: 'POST',
         body: formData,
       });
@@ -118,7 +119,7 @@ const JobResults = ({ jobResults, sessionData, onBackToSearch, loading, setLoadi
       formData.append('session_id', sessionData.session_id);
       formData.append('job_description', jobDescription);
 
-      const response = await fetch('http://localhost:8000/analyze-resume-vs-job', {
+      const response = await fetch(API_ENDPOINTS.analyzeResumeVsJob(), {
         method: 'POST',
         body: formData,
       });

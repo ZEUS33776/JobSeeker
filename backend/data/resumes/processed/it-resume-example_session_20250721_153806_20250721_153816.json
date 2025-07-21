@@ -1,0 +1,209 @@
+{
+  "session_id": "session_20250721_153806",
+  "original_filename": "it-resume-example.pdf",
+  "storage_filename": "it-resume-example_session_20250721_153806_20250721_153816",
+  "timestamp": "2025-07-21T15:38:16.900009",
+  "session_data": {
+    "resume_info": {
+      "role": "IT Engineer",
+      "skills": [
+        "Python",
+        "Microsoft 365",
+        "Agile Project Management",
+        "Network Infrastructure",
+        "Troubleshooting",
+        "Windows/Apple OS",
+        "VPN Maintenance",
+        "Verbal Communication",
+        "Customer Service",
+        "SQL"
+      ],
+      "experience": "mid-level",
+      "total_skills": 10
+    },
+    "resume_text": "DENNIS\nSCHERRER\n\nIT Engineer\n\nd.scherrer38@email.com\n(123) 456-7890\nHouston, TX\nLinkedIn (https://linkedin.com/)\n\nEDUCATION\n\nBachelor of Science\nComputer Science\nTexas A&M University\n\n2005 - 2009\nCollege Station, TX\n\nSKILLS\n\nPython\nMicrosoft 365\nAgile Project Management\nNetwork Infrastructure\nTroubleshooting\nWindows/Apple OS\nVPN Maintenance\nVerbal Communication\nCustomer Service\n\nCERTIFICATIONS\n\nMCSE\nCCNA\n\nWORK EXPERIENCE\nIT Engineer\nLoomis Armored US, LLC\n\n2020 - current\nHouston, TX\nHired 11 technicians and instructed them in Agile project\nmanagement, increasing efficiency by 39%\nDrafted troubleshooting guides for common technical\nstrategies, decreasing average ticket resolution time by 48%\nCollaborated with 13 techs to upgrade VPN security,\nincluding updating encryption methods and adding\nantivirus protection, reducing chances of a breach by 67%\nDeveloped and enhanced product security systems,\nmeeting 100% of client requirements\n\nNetwork Engineer\nADP\n\n2017 - 2020\nHouston, TX\nCreated and reorganized SQL queries and scripts for\ninternal troubleshooting, decreasing work tickets by 28%\nAnalyzed escalated tickets and coached junior techs to\nresolve 84% of excessive escalations\nAnalyzed diagnostic data to understand causes/correlations\nof network issues and presented results to internal staff\nCollaborated with staff to resolve network issues and\nimplement fixes, resulting in 31% fewer malfunctions\n\nSystems Support Engineer\nTwo Sigma\n\n2012 - 2017\nHouston, TX\nManaged 7 daily work tickets, prioritizing urgent needs and\nscheduling projects to resolve tickets within 2 hours\nTrained 8 junior techs to manage tickets, diagnose common\nproblems, and maintain workflows\nDeveloped solutions for software/hardware compatibility\nInstalled and upgraded internal applications and\ndocumentation, reducing installation errors by 12%\n\nIT Support Engineer\nCapital One\n\n2009 - 2012\nHouston, TX\nResolved 12 network/software Level I tickets per shift\nProvided technical support over the phone, email, and\ndesktop chat, responding to all messages within 4 hours\nDeveloped online FAQ articles to address common issues,\nreducing the average number of tickets by 39%\nDiagnosed and repaired network malfunctions including\nfile deletion, failed account entry, slow computer speed, and\n3rd party software compatibility issues",
+    "domain_analysis": {
+      "primary_roles": [
+        "Network Engineer",
+        "Systems Engineer",
+        "IT Support Engineer"
+      ],
+      "secondary_roles": [
+        "DevOps Engineer",
+        "Security Engineer"
+      ],
+      "skill_domains": [
+        {
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Network Infrastructure",
+            "VPN Maintenance",
+            "Troubleshooting"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "domain": "Systems & Hardware",
+          "matching_skills": [
+            "Network Infrastructure",
+            "Troubleshooting",
+            "Windows/Apple OS"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "Cybersecurity",
+          "matching_skills": [
+            "VPN Maintenance",
+            "Troubleshooting"
+          ],
+          "confidence": "low"
+        },
+        {
+          "domain": "Tech Support Engineer",
+          "matching_skills": [
+            "Troubleshooting",
+            "Windows/Apple OS",
+            "Verbal Communication",
+            "Customer Service"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "Data Engineering & Analytics",
+          "matching_skills": [
+            "SQL"
+          ],
+          "confidence": "low"
+        },
+        {
+          "domain": "Other Specialized Tech Roles",
+          "matching_skills": [
+            "Troubleshooting"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "suggested_roles_detailed": [
+        {
+          "role": "Systems Engineer",
+          "domain": "Systems & Hardware",
+          "matching_skills": [
+            "Network Infrastructure",
+            "Troubleshooting",
+            "Windows/Apple OS",
+            "VPN Maintenance"
+          ],
+          "confidence_score": 8.0,
+          "role_level": "mid",
+          "missing_skills": [
+            "Linux administration",
+            "Scripting (Bash, PowerShell)",
+            "Cloud experience (AWS, Azure, GCP)"
+          ]
+        },
+        {
+          "role": "Network Engineer",
+          "domain": "Systems & Hardware",
+          "matching_skills": [
+            "Network Infrastructure",
+            "Troubleshooting",
+            "VPN Maintenance",
+            "CCNA"
+          ],
+          "confidence_score": 9.0,
+          "role_level": "mid",
+          "missing_skills": [
+            "Advanced networking protocols",
+            "Network automation tools",
+            "Cloud networking"
+          ]
+        },
+        {
+          "role": "IT Support Engineer",
+          "domain": "Other Specialized Tech Roles",
+          "matching_skills": [
+            "Troubleshooting",
+            "Windows/Apple OS",
+            "Verbal Communication",
+            "Customer Service",
+            "Microsoft 365"
+          ],
+          "confidence_score": 9.0,
+          "role_level": "mid",
+          "missing_skills": [
+            "Specific ticketing systems (e.g., Jira, ServiceNow)",
+            "Advanced hardware troubleshooting"
+          ]
+        },
+        {
+          "role": "DevOps Engineer",
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Troubleshooting",
+            "Agile Project Management"
+          ],
+          "confidence_score": 5.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "CI/CD pipelines",
+            "Docker",
+            "Kubernetes",
+            "Cloud platforms (AWS, Azure, GCP)",
+            "Infrastructure as Code (Terraform, CloudFormation)"
+          ]
+        },
+        {
+          "role": "Security Engineer",
+          "domain": "Cybersecurity",
+          "matching_skills": [
+            "VPN Maintenance",
+            "Troubleshooting"
+          ],
+          "confidence_score": 6.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Firewall management",
+            "Intrusion detection/prevention systems",
+            "Security auditing",
+            "Penetration testing"
+          ]
+        },
+        {
+          "role": "Data Analyst",
+          "domain": "Data Engineering & Analytics",
+          "matching_skills": [
+            "SQL"
+          ],
+          "confidence_score": 4.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Data visualization tools (Tableau, Power BI)",
+            "Statistical analysis",
+            "Data modeling",
+            "ETL processes"
+          ]
+        }
+      ],
+      "strongest_domain": "Systems & Hardware",
+      "cross_domain_potential": "Yes, with further skill development",
+      "skill_summary": null
+    },
+    "preferences": {
+      "location": "",
+      "experience_level": "entry",
+      "job_type": "full-time",
+      "remote_preference": "hybrid"
+    },
+    "created_at": "2025-07-21T15:38:16.900009",
+    "filename": "it-resume-example.pdf",
+    "file_info": null,
+    "last_analysis": null
+  },
+  "metadata": {
+    "resume_text_length": 2318,
+    "skills_count": 10,
+    "has_domain_analysis": true,
+    "has_preferences": true
+  }
+}
