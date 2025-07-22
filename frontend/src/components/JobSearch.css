@@ -1,0 +1,379 @@
+/* JobSearch.css */
+.job-search {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Common Section Styles */
+.search-section {
+  background: var(--surface-elevated);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-icon {
+  font-size: 1.2rem;
+}
+
+/* Resume Analysis Section */
+.analyzing-spinner {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--surface-hover);
+  border-radius: var(--border-radius);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Key Skills Section */
+.key-skills {
+  margin-top: 2rem;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.skills-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.skills-list::-webkit-scrollbar-track {
+  background: var(--surface-alt);
+  border-radius: 3px;
+}
+
+.skills-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.skills-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.skill-tag {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+/* Domain Selection */
+.domains-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.domain-card {
+  background: var(--surface);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.domain-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.domain-card.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-bg);
+}
+
+.domain-card h4 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.domain-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  max-height: 80px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--surface-alt);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.domain-skills::-webkit-scrollbar {
+  width: 4px;
+}
+
+.domain-skills::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 2px;
+}
+
+.domain-skills::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.domain-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--surface-alt);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.domain-roles::-webkit-scrollbar {
+  width: 4px;
+}
+
+.domain-roles::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 2px;
+}
+
+.domain-roles::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.role-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-btn:hover {
+  background: var(--primary-bg);
+  border-color: var(--primary-color);
+}
+
+.role-btn.selected {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--primary-bg);
+}
+
+/* Custom Role Input */
+.custom-role {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.custom-role-input {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.custom-role-input input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+/* Search Actions */
+.search-actions {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.search-preview {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--surface-alt);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.search-button {
+  min-width: 200px;
+  margin: 0 auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .domains-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .custom-role-input {
+    flex-direction: column;
+  }
+
+  .custom-role-input .btn {
+    width: 100%;
+  }
+
+  .domain-roles {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .role-btn {
+    width: 100%;
+    text-align: center;
+  }
+} 
+
+.recommended-roles {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.recommended-roles h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.recommended-roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--surface-alt);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.recommended-roles-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.recommended-roles-list::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 2px;
+}
+
+.recommended-roles-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.no-domain-roles {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+} 
+
+.llm-extracted-info {
+  margin-top: 2rem;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+}
+
+.llm-summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.llm-summary-block {
+  min-width: 180px;
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.llm-summary-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.llm-summary-value {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Scrollable container for skills in LLM summary */
+.llm-summary-value.skills-container {
+  max-height: 80px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--surface-alt);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  align-items: flex-start;
+}
+
+.llm-summary-value.skills-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.llm-summary-value.skills-container::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 2px;
+}
+
+.llm-summary-value.skills-container::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+} 

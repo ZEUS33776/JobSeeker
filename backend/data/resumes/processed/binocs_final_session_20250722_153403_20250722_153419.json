@@ -1,0 +1,369 @@
+{
+  "session_id": "session_20250722_153403",
+  "original_filename": "binocs_final.pdf",
+  "storage_filename": "binocs_final_session_20250722_153403_20250722_153419",
+  "timestamp": "2025-07-22T15:34:19.843812",
+  "session_data": {
+    "resume_info": {
+      "role": "Software Engineer",
+      "skills": [
+        "Python",
+        "Java",
+        "C",
+        "C++",
+        "JavaScript",
+        "SQL",
+        "Shell Scripting",
+        "Git",
+        "GitHub",
+        "Docker",
+        "CI/CD",
+        "DBT",
+        "Redis Queue",
+        "Version Control",
+        "React.js",
+        "Node.js",
+        "Express.js",
+        "Flask",
+        "FastAPI",
+        "REST APIs",
+        "Tailwind CSS",
+        "HTML",
+        "CSS",
+        "Operating Systems",
+        "Computer Architecture",
+        "Instruction Set Architecture",
+        "CPU Pipelines",
+        "Cache Systems",
+        "Distributed Systems",
+        "Microservices",
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Redis",
+        "Database Design",
+        "Query Optimization",
+        "AWS",
+        "Google Cloud Platform",
+        "Supabase",
+        "Cloud Computing",
+        "Deployment",
+        "Machine Learning",
+        "Deep Learning",
+        "Scikit-Learn",
+        "TensorFlow",
+        "Pandas",
+        "NumPy",
+        "LangChain",
+        "RAG",
+        "Natural Language Processing",
+        "Large Language Models",
+        "Semantic Search",
+        "Algorithm Design",
+        "Data Structures",
+        "Competitive Programming",
+        "Code Optimization"
+      ],
+      "experience": "entry-level",
+      "total_skills": 56
+    },
+    "resume_text": "Arjun Deshmukh\n# (mailto:desh.arjun3@gmail.com)  (mailto:desh.arjun3@gmail.com)desh.arjun3@gmail.com (mailto:desh.arjun3@gmail.com)\n§ (https://github.com/ZEUS33776)  (https://github.com/ZEUS33776)github.com/ZEUS33776 (https://github.com/ZEUS33776)\n (https://portfolio-6rj9.onrender.com/)  (https://portfolio-6rj9.onrender.com/)portfolio-6rj9.onrender.com (https://portfolio-6rj9.onrender.com/)\nÐ (https://leetcode.com/u/ZEUS_7/)  (https://leetcode.com/u/ZEUS_7/)leetcode.com/u/ZEUS 7 (https://leetcode.com/u/ZEUS_7/)\nProfessional Summary\n\n• Passionate software engineer with a deep interest in building scalable AI-driven systems that solve real-world problems.\nExperienced in full-stack development, machine learning, and intelligent automation using large language models and multi-agent\nframeworks. I thrive on designing systems that combine engineering rigor with the transformative potential of generative AI to\ncreate impactful, end-to-end solutions.\n\nEducation\n\nIndian Institute of Information Technology, Kottayam\nNov 2022 – March 2026\nBachelor of Technology in Computer Science and Engineering\nCGPA: 9.06/10\n\nProfessional Experience\n\nXcdify Solutions Private Limited\nDec 2024 – Present\nSoftware Engineering Intern (Remote)\nBengaluru, Karnataka\n\n• Designed and implemented enterprise-level Vehicle Routing Problem (VRP) optimization algorithms serving 50+ fleet vehicles,\nachieving 20% cost reduction in transportation expenses and 35% improvement in operational efficiency through advanced routing\nalgorithms.\n• Built and deployed comprehensive data analytics platform using dbt (Data Build Tool) with 10+ automated data\ntransformation pipelines, improving data processing performance by 40% and enabling real-time business intelligence for\nstakeholders.\n• Developed scalable ETL workflows with 50+ SQL transformations and automated reporting systems, reducing manual data\nprocessing overhead by 60% while consistently meeting agile sprint deliverables.\n\nTechnical Projects\n\nVCS-Core – Distributed Version Control System | Python, CLI, Cryptography, Git Protocol\nGithub (https://github.com/ZEUS33776/vcs.git) | (https://github.com/ZEUS33776/vcs.git) PyPI (https://pypi.org/project/vcs-core/0.1.0/)\n\n• Developed and published open-source distributed version control system to PyPI with 100% Git compatibility, demonstrating\nadvanced understanding of version control architecture and software engineering principles.\n• Implemented advanced file tracking and versioning using SHA-256 cryptographic hashing, delta compression algorithms, and tree\ndata structures, achieving 40% storage optimization while maintaining 99.9% data integrity.\n• Created comprehensive command-line interface with 15+ Git-compatible commands including branching, merging, and conflict\nresolution, ensuring seamless integration with existing development workflows.\n• Achieved 220+ downloads within first week of PyPI publication, including complete documentation, unit testing, and\ncontinuous integration best practices.\n\nLyfline – Machine Learning Healthcare Platform | Python, React, Node.js, PostgreSQL\nGithub (https://github.com/ZEUS33776/Lyfline.git) | (https://github.com/ZEUS33776/Lyfline.git) Live Demo (https://lyfline.onrender.com/)\n\n• Engineered predictive analytics healthcare platform with 3 machine learning models achieving 87% accuracy for patient risk\nassessment and 97% accuracy for admitted patient monitoring using supervised learning algorithms.\n• Built real-time patient monitoring system with automated alert capabilities, reducing critical condition detection time by 25%\nthrough predictive modeling and enabling timely healthcare intervention.\n• Implemented secure healthcare database management system with PostgreSQL, featuring role-based access control and\nHIPAA-compliant data protection protocols for 1000+ patient records.\n• Created responsive web application dashboard using React with data visualization components, enabling healthcare professionals to\nmake clinical decisions 40% faster through intuitive risk assessment interfaces.\n\nJobSeeker – AI-Powered Job Search Platform | LangChain, LlamaIndex, LangGraph, FastAPI, React\nGithub (https://github.com/ZEUS33776/JobSeeker)\n\n• Developing comprehensive job search automation platform with resume parsing, generating 5–7 targeted search queries,\nautomated job scraping and ranking of 10–20 listings, resume scoring algorithms (1–100 scale), and customized LaTeX resume\ngeneration.\n• Integrated LangChain for dynamic query generation, LlamaIndex for resume content indexing ( 5000 tokens), and LangGraph\n+ CrewAI for multi-agent RAG pipeline orchestration enabling contextual job matching and feedback systems.\n• Architected scalable FastAPI microservices backend with responsive React frontend, leveraging large language models for\nresume parsing and optimization, improving keyword alignment by 30–40%.\n• Deployed containerized application on Google Cloud Platform with Supabase database integration, managing 100+\nreal-time job metadata entries with automated data pipeline processing.\n\nDistill – AI-Powered Learning Platform | RAG, LLM, React, Vector Embeddings\nGitHub (https://github.com/ZEUS33776/Distill--AI-powered-study-assistant) | (https://github.com/ZEUS33776/Distill--AI-powered-study-assistant) Live Demo (https://distill-frontend-dj2j.onrender.com/)\n\n• Built full-stack intelligent learning platform supporting PDF and YouTube video processing with custom RAG pipeline\nimplementation, vector embeddings, and large language model integration for enhanced content understanding.\n• Developed advanced content ingestion system with PDF extraction and YouTube processing capabilities, utilizing\nlama-4-scout-17b for inference and Groq for high-performance response generation, achieving 60% faster query processing.\n• Implemented comprehensive user authentication system with JWT tokens and namespace isolation, featuring performance analytics\ntracking across quiz scores, flashcard metrics, and session data for personalized learning insights.\n• Created assessment generation system with real-time performance analytics, contextual chat interactions, and comprehensive\nlearning metrics, increasing user engagement by 45%.\n\nTechnical Skills\n\n• Programming Languages: Python, Java, C, C++, JavaScript, SQL, Shell Scripting\n• Development Tools: Git, GitHub, Docker, CI/CD, DBT, Redis Queue, Version Control\n• Web Technologies: React.js, Node.js, Express.js, Flask, FastAPI, REST APIs, Tailwind CSS, HTML, CSS\n• System Architecture: Operating Systems, Computer Architecture, Instruction Set Architecture, CPU Pipelines, Cache Systems,\nDistributed Systems, Microservices\n• Database Technologies: PostgreSQL, MySQL, MongoDB, Redis, Database Design, Query Optimization\n• Cloud Platforms: AWS, Google Cloud Platform, Supabase, Cloud Computing, Deployment\n• Artificial Intelligence: Machine Learning, Deep Learning, Scikit-Learn, TensorFlow, Pandas, NumPy, LangChain, RAG, Natural\nLanguage Processing, Large Language Models, Semantic Search\n• Software Engineering: Algorithm Design, Data Structures, Competitive Programming, Code Optimization\n\nRelevant Coursework\n\n– Compiler Design\n– Database Management\n– Cloud Computing\n\n– Design and Analysis of\nAlgorithms\n– Artificial Intelligence\n\n– Computer Architecture\n– Software Design Patterns\n– Data Warehousing and\n\nMining\n– Operating Systems\n– Distributed Computing\n\nAchievements & Recognition\n\n• Maintained 1819 rating on LeetCode demonstrating advanced problem-solving capabilities and competitive programming\nexpertise among top-tier software engineers.\n• Solved 390+ algorithmic problems on LeetCode and 500+ coding challenges across multiple platforms including Codeforces\nand GeeksforGeeks, showcasing strong data structures and algorithms proficiency.\n• Ranked in top 3% among 28,000 participants in LeetCode Contest 151, demonstrating exceptional competitive programming\nskills under time constraints.\n• Open Source Contribution: VCS-Core Python package achieved 320+ PyPI downloads within first week of publication,\ndemonstrating software engineering excellence and community adoption.",
+    "domain_analysis": {
+      "primary_roles": [
+        "Full Stack Developer",
+        "Machine Learning Engineer",
+        "AI Engineer"
+      ],
+      "secondary_roles": [
+        "Backend Developer",
+        "Data Engineer",
+        "Cloud Engineer"
+      ],
+      "skill_domains": [
+        {
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Python",
+            "Java",
+            "C",
+            "C++",
+            "JavaScript",
+            "SQL",
+            "Shell Scripting",
+            "Git",
+            "GitHub",
+            "Docker",
+            "CI/CD",
+            "React.js",
+            "Node.js",
+            "Express.js",
+            "Flask",
+            "FastAPI",
+            "REST APIs",
+            "Tailwind CSS",
+            "HTML",
+            "CSS",
+            "Algorithm Design",
+            "Data Structures",
+            "Code Optimization",
+            "Microservices"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "Artificial Intelligence & Data Science",
+          "matching_skills": [
+            "Machine Learning",
+            "Deep Learning",
+            "Scikit-Learn",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "LangChain",
+            "RAG",
+            "Natural Language Processing",
+            "Large Language Models",
+            "Semantic Search"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "Data Engineering & Analytics",
+          "matching_skills": [
+            "SQL",
+            "DBT",
+            "Database Design",
+            "Query Optimization",
+            "PostgreSQL",
+            "MySQL",
+            "MongoDB",
+            "Redis"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Docker",
+            "CI/CD",
+            "AWS",
+            "Google Cloud Platform",
+            "Supabase",
+            "Cloud Computing",
+            "Deployment",
+            "Redis Queue",
+            "Version Control"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "domain": "Web & Cloud Technologies",
+          "matching_skills": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React.js",
+            "Node.js",
+            "Express.js",
+            "Flask",
+            "FastAPI",
+            "REST APIs",
+            "Tailwind CSS",
+            "AWS",
+            "Google Cloud Platform",
+            "Supabase",
+            "Cloud Computing",
+            "Deployment"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "System Architecture",
+          "matching_skills": [
+            "Operating Systems",
+            "Computer Architecture",
+            "Instruction Set Architecture",
+            "CPU Pipelines",
+            "Cache Systems",
+            "Distributed Systems",
+            "Microservices"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "suggested_roles_detailed": [
+        {
+          "role": "Full Stack Developer",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Python",
+            "JavaScript",
+            "React.js",
+            "Node.js",
+            "Express.js",
+            "Flask",
+            "FastAPI",
+            "REST APIs",
+            "HTML",
+            "CSS",
+            "SQL",
+            "Docker",
+            "AWS",
+            "Google Cloud Platform"
+          ],
+          "confidence_score": 9.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with specific cloud deployment strategies",
+            "Advanced frontend architecture"
+          ]
+        },
+        {
+          "role": "Machine Learning Engineer",
+          "domain": "Artificial Intelligence & Data Science",
+          "matching_skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "Scikit-Learn",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "LangChain",
+            "RAG",
+            "Natural Language Processing",
+            "Large Language Models",
+            "Semantic Search"
+          ],
+          "confidence_score": 8.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with specific ML deployment frameworks",
+            "Advanced knowledge of specific ML domains (e.g., computer vision)"
+          ]
+        },
+        {
+          "role": "AI Engineer",
+          "domain": "Artificial Intelligence & Data Science",
+          "matching_skills": [
+            "Python",
+            "LangChain",
+            "RAG",
+            "Large Language Models",
+            "Machine Learning",
+            "Deep Learning"
+          ],
+          "confidence_score": 8.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with specific LLM fine-tuning techniques",
+            "Knowledge of ethical considerations in AI"
+          ]
+        },
+        {
+          "role": "Backend Developer",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Python",
+            "Java",
+            "Node.js",
+            "Express.js",
+            "Flask",
+            "FastAPI",
+            "SQL",
+            "PostgreSQL",
+            "MySQL",
+            "MongoDB",
+            "REST APIs",
+            "Microservices"
+          ],
+          "confidence_score": 7.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with specific backend frameworks (e.g., Django, Spring Boot)",
+            "Advanced database administration skills"
+          ]
+        },
+        {
+          "role": "Data Engineer",
+          "domain": "Data Engineering & Analytics",
+          "matching_skills": [
+            "Python",
+            "SQL",
+            "DBT",
+            "Database Design",
+            "Query Optimization",
+            "PostgreSQL",
+            "MySQL",
+            "MongoDB",
+            "Redis",
+            "Cloud Computing"
+          ],
+          "confidence_score": 6.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "Experience with ETL tools (e.g., Airflow, Spark)",
+            "Knowledge of data warehousing concepts"
+          ]
+        },
+        {
+          "role": "Cloud Engineer",
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Docker",
+            "CI/CD",
+            "AWS",
+            "Google Cloud Platform",
+            "Supabase",
+            "Cloud Computing",
+            "Deployment"
+          ],
+          "confidence_score": 6.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "Experience with infrastructure-as-code tools (e.g., Terraform, CloudFormation)",
+            "Knowledge of cloud security best practices"
+          ]
+        },
+        {
+          "role": "DevOps Engineer",
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Docker",
+            "CI/CD",
+            "Git",
+            "GitHub",
+            "Cloud Computing",
+            "Shell Scripting"
+          ],
+          "confidence_score": 5.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "Kubernetes",
+            "Terraform",
+            "Monitoring tools (e.g., Prometheus, Grafana)"
+          ]
+        }
+      ],
+      "strongest_domain": "Software Development & Engineering",
+      "cross_domain_potential": "High - Demonstrates skills across full-stack development, AI/ML, data engineering, and cloud technologies.",
+      "skill_summary": null
+    },
+    "preferences": {
+      "location": "",
+      "experience_level": "entry",
+      "job_type": "full-time",
+      "remote_preference": "hybrid"
+    },
+    "created_at": "2025-07-22T15:34:19.843812",
+    "filename": "binocs_final.pdf",
+    "file_info": null,
+    "last_analysis": null
+  },
+  "metadata": {
+    "resume_text_length": 8108,
+    "skills_count": 56,
+    "has_domain_analysis": true,
+    "has_preferences": true
+  }
+}

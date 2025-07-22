@@ -7,6 +7,7 @@ import requests
 from typing import List, Dict, Any, Optional
 import logging
 from pathlib import Path
+import re
 
 from app.models.resume_builder import (
     ResumeTemplate, ResumeData, LLMResumeResponse, 
@@ -14,7 +15,7 @@ from app.models.resume_builder import (
 )
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_anthropic import ChatAnthropic
-from app.core.config import GEMINI_API_KEY, CLAUDE_API_KEY
+from app.core.config import GEMINI_API_KEY, ANTHROPIC_API_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -646,35 +647,56 @@ class ResumeBuilderService:
     def generate_resume_latex(self, template_id: str, resume_data: ResumeData, user_text: str = "") -> Optional[LLMResumeResponse]:
         """Generate LaTeX resume using LLM"""
         try:
+            logger.info(f"[generate_resume_latex] Start for template_id={template_id}")
+            print(f"[generate_resume_latex] Start for template_id={template_id}")
             # Get template LaTeX code
             template_latex = self.get_template_latex(template_id)
+            logger.info(f"[generate_resume_latex] Got template LaTeX for {template_id}")
+            print(f"[generate_resume_latex] Got template LaTeX for {template_id}")
             if not template_latex:
                 logger.error(f"Template LaTeX not found for {template_id}")
+                print(f"Template LaTeX not found for {template_id}")
                 return None
             
             template = self.get_template(template_id)
+            logger.info(f"[generate_resume_latex] Got template object for {template_id}")
+            print(f"[generate_resume_latex] Got template object for {template_id}")
             if not template:
                 logger.error(f"Template not found for {template_id}")
+                print(f"Template not found for {template_id}")
                 return None
             
             # Prepare user information
             user_info = self._format_resume_data_for_llm(resume_data, user_text)
+            logger.info(f"[generate_resume_latex] Formatted user info for LLM")
+            print(f"[generate_resume_latex] Formatted user info for LLM")
             
             # Create LLM prompt
             prompt = self._create_resume_generation_prompt(user_info, template_latex, template.name)
+            logger.info(f"[generate_resume_latex] Created LLM prompt")
+            print(f"[generate_resume_latex] Created LLM prompt")
             
             # Create LLM client (using Claude for resume generation)
             try:
+                logger.info(f"[generate_resume_latex] Creating Claude LLM client")
+                print(f"[generate_resume_latex] Creating Claude LLM client")
+                print(ANTHROPIC_API_KEY)
                 llm_client = ChatAnthropic(
                     model="claude-3-5-sonnet-20241022",
-                    anthropic_api_key=CLAUDE_API_KEY,
+                    anthropic_api_key=ANTHROPIC_API_KEY,
                     temperature=0.1,
                     max_tokens=4000
                 )
+                logger.info(f"[generate_resume_latex] Claude LLM client created")
+                print(f"[generate_resume_latex] Claude LLM client created")
             except Exception as e:
                 logger.error(f"Error creating Claude LLM client: {e}")
+                print(f"Error creating Claude LLM client: {e}")
                 # Fallback to Gemini if Claude fails
                 try:
+                    logger.info(f"[generate_resume_latex] Creating Gemini LLM client as fallback")
+                    print(f"[generate_resume_latex] Creating Gemini LLM client as fallback")
+                    print(GEMINI_API_KEY)
                     llm_client = ChatGoogleGenerativeAI(
                         model="gemini-1.5-flash",
                         google_api_key=GEMINI_API_KEY,
@@ -682,24 +704,38 @@ class ResumeBuilderService:
                         max_tokens=4000
                     )
                     logger.info("Using Gemini as fallback for resume generation")
+                    print("Using Gemini as fallback for resume generation")
                 except Exception as fallback_error:
                     logger.error(f"Error creating fallback Gemini client: {fallback_error}")
+                    print(f"Error creating fallback Gemini client: {fallback_error}")
                     return None
             
+            logger.info(f"[generate_resume_latex] Invoking LLM client")
+            print(f"[generate_resume_latex] Invoking LLM client")
             response = llm_client.invoke(prompt)
+            logger.info(f"[generate_resume_latex] LLM client invocation complete")
+            print(f"[generate_resume_latex] LLM client invocation complete")
             
             # Parse LLM response
             try:
                 # Extract JSON from response
                 response_text = response.content if hasattr(response, 'content') else str(response)
+                logger.info(f"[generate_resume_latex] Got response from LLM client")
+                print(f"[generate_resume_latex] Got response from LLM client")
+                print("raw response:", response_text)
+                
+                # Clean the response text to remove problematic control characters
+                cleaned_response_text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', response_text)
                 
                 # Find JSON in the response
-                start_idx = response_text.find('{')
-                end_idx = response_text.rfind('}') + 1
+                start_idx = cleaned_response_text.find('{')
+                end_idx = cleaned_response_text.rfind('}') + 1
                 
                 if start_idx != -1 and end_idx != 0:
-                    json_str = response_text[start_idx:end_idx]
+                    json_str = cleaned_response_text[start_idx:end_idx]
                     llm_data = json.loads(json_str)
+                    logger.info(f"[generate_resume_latex] Parsed JSON from LLM response")
+                    print(f"[generate_resume_latex] Parsed JSON from LLM response")
                     
                     return LLMResumeResponse(
                         template_used=llm_data.get("template_used", template.name),
@@ -709,14 +745,17 @@ class ResumeBuilderService:
                     )
                 else:
                     logger.error("No JSON found in LLM response")
+                    print("No JSON found in LLM response")
                     return None
                     
             except json.JSONDecodeError as e:
                 logger.error(f"Error parsing LLM response JSON: {e}")
+                print(f"Error parsing LLM response JSON: {e}")
                 return None
                 
         except Exception as e:
             logger.error(f"Error generating resume LaTeX: {e}")
+            print(f"Error generating resume LaTeX: {e}")
             return None
     
     def _format_resume_data_for_llm(self, resume_data: ResumeData, user_text: str = "") -> str:
@@ -898,18 +937,7 @@ Generate the LaTeX code now:
                     error_message=error_msg
                 )
                 
-        except requests.exceptions.Timeout:
-            return PDFGenerationResponse(
-                success=False,
-                message="PDF generation timed out",
-                error_message="Request to latexonline.cc timed out after 60 seconds"
-            )
-        except requests.exceptions.RequestException as e:
-            return PDFGenerationResponse(
-                success=False,
-                message="PDF generation failed",
-                error_message=f"Request error: {str(e)}"
-            )
+        
         except Exception as e:
             logger.error(f"Error generating PDF: {e}")
             return PDFGenerationResponse(

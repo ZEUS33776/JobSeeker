@@ -1,111 +1,148 @@
 import React, { useState } from 'react';
-import { API_ENDPOINTS } from '../config/api';
+import { API_ENDPOINTS } from '../config/api.js';
+import JobSearch from './JobSearch';
+import JobResults from './JobResults';
+import './JobFinder.css';
 
 const JobFinder = ({ uploadedResumes, loading, setLoading }) => {
+  const [step, setStep] = useState(1); // 1: Select Resume, 2: Search Form, 3: Results
   const [selectedResume, setSelectedResume] = useState('');
-  const [locations, setLocations] = useState('');
-  const [positions, setPositions] = useState('');
-  const [results, setResults] = useState(null);
+  const [sessionData, setSessionData] = useState(null);
+  const [jobResults, setJobResults] = useState(null);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Step 1: Resume selection
+  const handleResumeSelect = async (e) => {
+    const sessionId = e.target.value;
+    setSelectedResume(sessionId);
+    setJobResults(null);
     setError('');
-    setResults(null);
-    if (!selectedResume || !locations || !positions) {
-      setError('Please select a resume, enter at least one location, and a position.');
-      return;
-    }
-    setLoading(true);
-    try {
-      // Call the backend job search endpoint (assume /jobs/search)
-      const response = await fetch(API_ENDPOINTS.searchJobs(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          session_id: selectedResume,
-          additional_keywords: positions,
-          max_results: 20,
-          updated_skills: '' // Optionally add skills
-        })
-      });
-      const data = await response.json();
-      if (data.success) {
-        setResults(data.data.jobs || []);
-      } else {
-        setError(data.message || 'Failed to find jobs.');
+    if (sessionId) {
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_ENDPOINTS.getSession(sessionId).replace('/sessions/', '/resume/sessions/')}`);
+        const data = await res.json();
+        if (data.success) {
+          setSessionData({ ...data, session_id: sessionId });
+          setStep(2);
+        } else {
+          setSessionData(null);
+          setError('Failed to load resume session data.');
+        }
+      } catch (err) {
+        setSessionData(null);
+        setError('Network error loading resume session.');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      setSessionData(null);
     }
   };
+
+  // Step 2: Job Search logic
+  const handleJobSearchCompleted = (results) => {
+    setJobResults(results);
+    setStep(3);
+  };
+
+  // Step navigation
+  const handleBackToResume = () => {
+    setStep(1);
+    setSelectedResume('');
+    setSessionData(null);
+    setJobResults(null);
+    setError('');
+  };
+
+  const handleBackToSearch = () => {
+    setStep(2);
+    setJobResults(null);
+    setError('');
+  };
+
+  // If no resumes uploaded
+  if (!uploadedResumes || uploadedResumes.length === 0) {
+    return (
+      <div className="job-finder-section">
+        <h2>Let's find you a job!</h2>
+        <div className="no-resumes-message">
+          <p>You haven't uploaded any resumes yet. Start by uploading a resume to find matching jobs!</p>
+          <a href="#resume-manager" className="btn btn-primary">
+            <span>📄</span>
+            Upload Resume
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="job-finder-section">
       <h2>Let's find you a job!</h2>
-      <form className="job-finder-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Select Resume</label>
-          <select
-            value={selectedResume}
-            onChange={e => setSelectedResume(e.target.value)}
-            required
-          >
-            <option value="">Choose a resume...</option>
-            {uploadedResumes.map(resume => (
-              <option key={resume.id} value={resume.id}>
-                {resume.name || resume.filename}
-              </option>
-            ))}
-          </select>
+      
+      {/* Loading State */}
+      {loading && (
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Loading...</p>
         </div>
-        <div className="form-group">
-          <label>Location(s)</label>
-          <input
-            type="text"
-            placeholder="Enter one or more locations (comma separated)"
-            value={locations}
-            onChange={e => setLocations(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Position(s)</label>
-          <input
-            type="text"
-            placeholder="Enter the position(s) you are looking for (comma separated)"
-            value={positions}
-            onChange={e => setPositions(e.target.value)}
-            required
-          />
-        </div>
-        <button className="btn-primary" type="submit" disabled={loading}>
-          {loading ? 'Searching...' : 'Find Jobs'}
-        </button>
-        {error && <div className="error-message">{error}</div>}
-      </form>
-      {results && (
-        <div className="job-results">
-          <h3>Job Results</h3>
-          {results.length === 0 ? (
-            <p>No jobs found for your criteria.</p>
-          ) : (
-            <ul className="job-list">
-              {results.map((job, idx) => (
-                <li key={job.url || idx} className="job-item">
-                  <a href={job.url} target="_blank" rel="noopener noreferrer">
-                    <h4>{job.title}</h4>
-                  </a>
-                  <p><strong>Company:</strong> {job.company}</p>
-                  <p><strong>Location:</strong> {job.location}</p>
-                  <p><strong>Description:</strong> {job.snippet || job.description}</p>
-                  <p><strong>Source:</strong> {job.source}</p>
-                </li>
+      )}
+
+      {/* Step 1: Resume selection */}
+      {!loading && step === 1 && (
+        <div className="step-resume-select">
+          <div className="form-group">
+            <label>Select a Resume</label>
+            <select 
+              value={selectedResume} 
+              onChange={handleResumeSelect} 
+              required
+              className={error ? 'error' : ''}
+            >
+              <option value="">Choose a resume to start...</option>
+              {uploadedResumes.map(resume => (
+                <option key={resume.id} value={resume.id}>
+                  {resume.name || resume.filename}
+                </option>
               ))}
-            </ul>
-          )}
+            </select>
+            {error && <div className="error-message">{error}</div>}
+          </div>
+          <p className="help-text">
+            Choose a resume to find matching job opportunities. We'll analyze your skills and experience to find the best matches.
+          </p>
+        </div>
+      )}
+
+      {/* Step 2: Job Search Form */}
+      {!loading && step === 2 && sessionData && (
+        <div className="step-job-search">
+          <button className="back-button" onClick={handleBackToResume}>
+            Back to Resume Selection
+          </button>
+          <JobSearch
+            sessionData={sessionData}
+            onJobSearchCompleted={handleJobSearchCompleted}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        </div>
+      )}
+
+      {/* Step 3: Job Results */}
+      {!loading && step === 3 && jobResults && (
+        <div className="step-job-results">
+          <button className="back-button" onClick={handleBackToSearch}>
+            Back to Search
+          </button>
+          <JobResults
+            jobResults={jobResults}
+            sessionData={sessionData}
+            onBackToSearch={handleBackToSearch}
+            loading={loading}
+            setLoading={setLoading}
+          />
         </div>
       )}
     </div>

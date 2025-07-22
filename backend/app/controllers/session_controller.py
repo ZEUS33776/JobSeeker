@@ -40,10 +40,10 @@ class SessionController:
             # Add AI suggestions if available
             if "domain_analysis" in session_data:
                 session_info.ai_suggestions = {
-                    "primary_roles": session_data["domain_analysis"].get("primary_roles", []),
-                    "secondary_roles": session_data["domain_analysis"].get("secondary_roles", []),
-                    "skill_domains": session_data["domain_analysis"].get("domains", []),
-                    "strongest_domain": session_data["domain_analysis"].get("skill_summary", {}).get("strongest_domain", "")
+                    "primary_roles": session_data["domain_analysis"].get("primary_role_recommendations", []),
+                    "secondary_roles": session_data["domain_analysis"].get("secondary_role_options", []),
+                    "skill_domains": session_data["domain_analysis"].get("identified_domains", []),
+                    "strongest_domain": session_data["domain_analysis"].get("skill_domain_summary", {}).get("strongest_domain", "")
                 }
             
             return session_info

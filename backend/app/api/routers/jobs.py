@@ -17,7 +17,9 @@ async def search_jobs_endpoint(
     session_id: str = Form(...),
     additional_keywords: str = Form(default=""),
     max_results: int = Form(default=20),
-    updated_skills: str = Form(default="")
+    updated_skills: str = Form(default=""),
+    desired_roles: str = Form(default=""),
+    search_scope: str = Form(default="job_boards")  # Add search_scope parameter
 ):
     """Search for jobs based on processed resume and preferences"""
     
@@ -26,7 +28,9 @@ async def search_jobs_endpoint(
         session_id=session_id,
         additional_keywords=additional_keywords,
         max_results=max_results,
-        updated_skills=updated_skills
+        updated_skills=updated_skills,
+        desired_roles=desired_roles,
+        search_scope=search_scope  # Pass search_scope to the request model
     )
     
     # Validate session
@@ -38,12 +42,12 @@ async def search_jobs_endpoint(
     
     # Build search query
     search_params = JobController.build_search_query(
-        session_data, search_request.additional_keywords, updated_skills_list
+        session_data, search_request.additional_keywords, updated_skills_list, search_request.desired_roles
     )
     
     # Search and rank jobs
     ranked_results = JobController.search_and_rank_jobs(
-        search_params, search_request.max_results, session_data
+        search_params, search_request.max_results, session_data, search_request.search_scope
     )
     
     # Format response

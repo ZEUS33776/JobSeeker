@@ -1,0 +1,88 @@
+Ada Lovelace 
+
+(919) 110-0110 | adalove@gmail.com |  LinkedIn (https://www.linkedin.com) |  GitHub (https://github.com/) 
+
+ 
+EDUCATION  
+
+ 
+University of North Carolina at Chapel Hill  ​
+           May 2026           
+B.S. Computer Science, Minors in Data Science and Studio Art | GPA: 3.6/4.0    ​
+Chapel Hill, NC                
+●​
+Courses: Files and Databases, Modern Web Development, Mobile Operating Systems, Computer Organization, 
+Data Structures, Algorithms & Analysis, Foundations of Programming 
+●​
+Honors: Dean’s List, Honors Carolina 
+
+ 
+
+ 
+TECHNICAL SKILLS 
+
+ 
+Languages (ordered by proficiency): Java, Python (Pandas, Matplotlib, Plotly, pytest), JavaScript, C, Swift, TypeScript 
+Tools and Frameworks: Node.js, React.js, AngularJS, Docker, PyTorch, Git 
+
+ 
+RELEVANT EXPERIENCE 
+
+ 
+UNC-Chapel Hill Department of Computer Science​
+Aug. 2024 - Present 
+Undergraduate Teaching Assistant - Grading Lead​
+Chapel Hill, NC 
+●​
+Mentored over 600 students enrolled in Introduction to Programming, explaining challenging concepts and 
+fundamental programming knowledge to both Computer Science and non-technical majors 
+●​
+Graded up to 6 exams a semester and developed Python scripts to organize large-scale grading efforts, while 
+simultaneously hosting 10+ hours of office hours a week for students 
+Fidelity​
+​
+May 2024 - Aug. 2024  
+
+Software Engineering Intern​
+Durham, NC 
+●​
+Developed web application using Node.js and Python frameworks for improving customer transaction 
+efficiency by up to 10 seconds through optimized backend processes 
+●​
+Collaborated with one other intern in an Agile environment to develop scalable backend features and improved 
+API and SQL response time 
+
+ 
+PROJECTS 
+
+ 
+MusicBoxd | HackNC​
+Oct. 2024 
+●​
+Partnered with a team of 3 and developed a fully functional iOS App with a dynamic Swift interface, real-time 
+database retrieval using Firebase, and Genius’ API for song and artist retrieval 
+●​
+Awarded the Hack for Connectivity by Pendo and third place overall for the whole hackathon 
+Discover the New World | Personal Project​
+May 2023 
+●​
+Created a mini-game in C# for Xbox with immersive music and sound effects, and designed the user interface 
+using Figma 
+●​
+Generated a random map based on a 2D array with multiple pages for the user to traverse on their west 
+
+ 
+
+ 
+LEADERSHIP EXPERIENCE 
+
+ 
+CATCH Project Manager​
+Jan 2024 - Present  
+UNC CS for Social Good​
+Chapel Hill, NC 
+●​
+Lead weekly meetings for CATCH,  maintain project goals, and develop timelines for stages and deployment 
+●​
+Contribute to backend development on a web-based application for a local non-profit, emphasizing database 
+efficiency and optimized API calls to improve user experience and reduce wait time

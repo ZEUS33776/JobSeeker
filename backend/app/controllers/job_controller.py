@@ -64,7 +64,8 @@ class JobController:
     def build_search_query(
         session_data: Dict[str, Any],
         additional_keywords: str,
-        updated_skills: List[str]
+        updated_skills: List[str],
+        desired_roles: str = ""
     ) -> Dict[str, Any]:
         """
         Build job search query from session data and additional parameters
@@ -73,6 +74,7 @@ class JobController:
             session_data: Session data containing resume info and preferences
             additional_keywords: Additional search keywords
             updated_skills: Updated skills list
+            desired_roles: Comma-separated list of user-selected desired roles
             
         Returns:
             Dictionary containing search parameters
@@ -81,18 +83,47 @@ class JobController:
         preferences = session_data["preferences"]
         
         # Extract search parameters
-        role = resume_info.get("Role", "")
+        original_role = resume_info.get("Role", "")
         location = preferences["location"] or "India"
         job_type = preferences["job_type"]
         experience_level = preferences["experience_level"]
         
-        # Adjust role based on user preferences
-        adjusted_role = adjust_role_for_preferences(role, job_type, experience_level)
+        # Use desired_roles if provided, otherwise fall back to original role
+        if desired_roles and desired_roles.strip():
+            # Parse desired roles from comma-separated string
+            roles_list = [role.strip() for role in desired_roles.split(",") if role.strip()]
+            if roles_list:
+                # Use the first selected role as primary, but keep all for search
+                primary_role = roles_list[0]
+                role_variants = roles_list[1:] if len(roles_list) > 1 else []
+                print(f"[JOB CONTROLLER] Using user-selected roles: {roles_list}")
+                print(f"[JOB CONTROLLER] Primary role: {primary_role}")
+                print(f"[JOB CONTROLLER] Role variants: {role_variants}")
+            else:
+                primary_role = original_role
+                role_variants = []
+                print(f"[JOB CONTROLLER] No valid desired roles, using original: {original_role}")
+        else:
+            primary_role = original_role
+            role_variants = []
+            print(f"[JOB CONTROLLER] No desired roles provided, using original: {original_role}")
         
-        # Build search keywords
+        # Adjust role based on user preferences
+        adjusted_role = adjust_role_for_preferences(primary_role, job_type, experience_level)
+        
+        # Build search keywords using selected roles
         search_keywords = []
         if adjusted_role:
             search_keywords.append(adjusted_role)
+        
+        # Add all selected roles to search keywords for broader coverage
+        if desired_roles and desired_roles.strip():
+            roles_list = [role.strip() for role in desired_roles.split(",") if role.strip()]
+            # Add role variants that aren't already included
+            for role in roles_list:
+                if role not in search_keywords:
+                    search_keywords.append(role)
+        
         if additional_keywords:
             search_keywords.extend(additional_keywords.split(","))
         
@@ -103,11 +134,18 @@ class JobController:
         
         query = " ".join(search_keywords).strip()
         
+        print(f"[JOB CONTROLLER] Final search query: '{query}'")
+        print(f"[JOB CONTROLLER] Location: {location}")
+        print(f"[JOB CONTROLLER] Adjusted role: {adjusted_role}")
+        print(f"[JOB CONTROLLER] Search keywords: {search_keywords}")
+        
         return {
             "query": query,
             "location": location,
             "adjusted_role": adjusted_role,
-            "original_role": role,
+            "original_role": original_role,
+            "desired_roles": desired_roles,
+            "role_variants": role_variants,
             "experience_level": experience_level,
             "job_type": job_type,
             "skills": updated_skills
@@ -117,17 +155,19 @@ class JobController:
     def search_and_rank_jobs(
         search_params: Dict[str, Any],
         max_results: int,
-        session_data: Dict[str, Any]
+        session_data: Dict[str, Any],
+        search_scope: str = "job_boards"
     ) -> JobSearchResults:
         """Search for jobs and rank them based on resume match"""
         try:
-            # Perform job search
+            # Perform job search with specified scope
             search_results = search_jobs(
                 query=search_params["query"],
                 location=search_params["location"],
                 num_results=max_results,
                 experience_level=search_params["experience_level"],
-                job_type=search_params["job_type"]
+                job_type=search_params["job_type"],
+                search_scope=search_scope
             )
             
             # Prepare resume info for ranking
@@ -136,6 +176,9 @@ class JobController:
             resume_info_for_ranking["Skills"] = search_params["skills"]
             resume_info_for_ranking["User_Experience_Level"] = search_params["experience_level"]
             resume_info_for_ranking["User_Job_Type"] = search_params["job_type"]
+            resume_info_for_ranking["max_results"] = max_results  # Pass max_results to ranking
+            resume_info_for_ranking["Role_Variants"] = search_params.get("role_variants", [])  # Pass user-selected roles for ranking
+            resume_info_for_ranking["Desired_Roles"] = search_params.get("desired_roles", "")  # Pass all desired roles
             
             # Rank results
             return rank_job_results(resume_info_for_ranking, search_results)

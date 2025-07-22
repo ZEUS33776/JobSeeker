@@ -1,0 +1,241 @@
+{
+  "session_id": "session_20250721_161028",
+  "original_filename": "Revised-Technical-Resume-Template-Spring-2025-2 (1).pdf",
+  "storage_filename": "Revised-Technical-Resume-Template-Spring-2025-2 (1)_session_20250721_161028_20250721_161039",
+  "timestamp": "2025-07-21T16:10:39.939918",
+  "session_data": {
+    "resume_info": {
+      "role": "Software Engineering Intern",
+      "skills": [
+        "Java",
+        "Python",
+        "Pandas",
+        "Matplotlib",
+        "Plotly",
+        "pytest",
+        "JavaScript",
+        "C",
+        "Swift",
+        "TypeScript",
+        "Node.js",
+        "React.js",
+        "AngularJS",
+        "Docker",
+        "PyTorch",
+        "Git",
+        "Firebase",
+        "C#",
+        "Figma"
+      ],
+      "experience": "entry-level",
+      "total_skills": 19
+    },
+    "resume_text": "Ada Lovelace \n\n(919) 110-0110 | adalove@gmail.com |  LinkedIn (https://www.linkedin.com) |  GitHub (https://github.com/) \n\n \nEDUCATION  \n\n \nUniversity of North Carolina at Chapel Hill  ​\n           May 2026           \nB.S. Computer Science, Minors in Data Science and Studio Art | GPA: 3.6/4.0    ​\nChapel Hill, NC                \n●​\nCourses: Files and Databases, Modern Web Development, Mobile Operating Systems, Computer Organization, \nData Structures, Algorithms & Analysis, Foundations of Programming \n●​\nHonors: Dean’s List, Honors Carolina \n\n \n\n \nTECHNICAL SKILLS \n\n \nLanguages (ordered by proficiency): Java, Python (Pandas, Matplotlib, Plotly, pytest), JavaScript, C, Swift, TypeScript \nTools and Frameworks: Node.js, React.js, AngularJS, Docker, PyTorch, Git \n\n \nRELEVANT EXPERIENCE \n\n \nUNC-Chapel Hill Department of Computer Science​\nAug. 2024 - Present \nUndergraduate Teaching Assistant - Grading Lead​\nChapel Hill, NC \n●​\nMentored over 600 students enrolled in Introduction to Programming, explaining challenging concepts and \nfundamental programming knowledge to both Computer Science and non-technical majors \n●​\nGraded up to 6 exams a semester and developed Python scripts to organize large-scale grading efforts, while \nsimultaneously hosting 10+ hours of office hours a week for students \nFidelity​\n​\nMay 2024 - Aug. 2024  \n\nSoftware Engineering Intern​\nDurham, NC \n●​\nDeveloped web application using Node.js and Python frameworks for improving customer transaction \nefficiency by up to 10 seconds through optimized backend processes \n●​\nCollaborated with one other intern in an Agile environment to develop scalable backend features and improved \nAPI and SQL response time \n\n \nPROJECTS \n\n \nMusicBoxd | HackNC​\nOct. 2024 \n●​\nPartnered with a team of 3 and developed a fully functional iOS App with a dynamic Swift interface, real-time \ndatabase retrieval using Firebase, and Genius’ API for song and artist retrieval \n●​\nAwarded the Hack for Connectivity by Pendo and third place overall for the whole hackathon \nDiscover the New World | Personal Project​\nMay 2023 \n●​\nCreated a mini-game in C# for Xbox with immersive music and sound effects, and designed the user interface \nusing Figma \n●​\nGenerated a random map based on a 2D array with multiple pages for the user to traverse on their west \n\n \n\n \nLEADERSHIP EXPERIENCE \n\n \nCATCH Project Manager​\nJan 2024 - Present  \nUNC CS for Social Good​\nChapel Hill, NC \n●​\nLead weekly meetings for CATCH,  maintain project goals, and develop timelines for stages and deployment \n●​\nContribute to backend development on a web-based application for a local non-profit, emphasizing database \nefficiency and optimized API calls to improve user experience and reduce wait time",
+    "domain_analysis": {
+      "primary_roles": [
+        "Full Stack Developer",
+        "Frontend Developer",
+        "Backend Developer"
+      ],
+      "secondary_roles": [
+        "Mobile App Developer (iOS)",
+        "Data Scientist"
+      ],
+      "skill_domains": [
+        {
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Java",
+            "Python",
+            "JavaScript",
+            "C",
+            "Swift",
+            "TypeScript",
+            "Node.js",
+            "React.js",
+            "AngularJS",
+            "C#",
+            "Git"
+          ],
+          "confidence": "high"
+        },
+        {
+          "domain": "Artificial Intelligence & Data Science",
+          "matching_skills": [
+            "Python",
+            "Pandas",
+            "Matplotlib",
+            "Plotly",
+            "pytest",
+            "PyTorch"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Docker",
+            "Git"
+          ],
+          "confidence": "low"
+        },
+        {
+          "domain": "Web & Cloud Technologies",
+          "matching_skills": [
+            "JavaScript",
+            "Node.js",
+            "React.js",
+            "AngularJS"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "domain": "Product & Design",
+          "matching_skills": [
+            "Figma"
+          ],
+          "confidence": "low"
+        },
+        {
+          "domain": "Mobile App Development",
+          "matching_skills": [
+            "Swift"
+          ],
+          "confidence": "low"
+        },
+        {
+          "domain": "Game Development",
+          "matching_skills": [
+            "C#"
+          ],
+          "confidence": "low"
+        }
+      ],
+      "suggested_roles_detailed": [
+        {
+          "role": "Full Stack Developer",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Java",
+            "Python",
+            "JavaScript",
+            "TypeScript",
+            "Node.js",
+            "React.js",
+            "AngularJS",
+            "Git"
+          ],
+          "confidence_score": 8.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with databases (SQL/NoSQL), deployment tools, testing frameworks"
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "JavaScript",
+            "TypeScript",
+            "React.js",
+            "AngularJS",
+            "Git"
+          ],
+          "confidence_score": 7.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "More in-depth knowledge of CSS preprocessors, state management libraries (Redux, Zustand), testing frameworks"
+          ]
+        },
+        {
+          "role": "Backend Developer",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Java",
+            "Python",
+            "Node.js",
+            "Git"
+          ],
+          "confidence_score": 7.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with specific backend frameworks (e.g., Django, Spring Boot), database management, API design"
+          ]
+        },
+        {
+          "role": "Mobile App Developer (iOS)",
+          "domain": "Software Development & Engineering",
+          "matching_skills": [
+            "Swift",
+            "Firebase"
+          ],
+          "confidence_score": 6.0,
+          "role_level": "junior",
+          "missing_skills": [
+            "Experience with iOS frameworks (UIKit, SwiftUI), mobile testing, app store deployment"
+          ]
+        },
+        {
+          "role": "Data Scientist",
+          "domain": "Artificial Intelligence & Data Science",
+          "matching_skills": [
+            "Python",
+            "Pandas",
+            "Matplotlib",
+            "Plotly",
+            "pytest"
+          ],
+          "confidence_score": 6.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "Stronger statistical modeling skills, machine learning algorithms, experience with cloud platforms (AWS, Azure, GCP)"
+          ]
+        },
+        {
+          "role": "Game Developer",
+          "domain": "Game Development",
+          "matching_skills": [
+            "C#"
+          ],
+          "confidence_score": 5.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "Experience with game engines (Unity, Unreal Engine), game design principles, 3D graphics"
+          ]
+        },
+        {
+          "role": "DevOps Engineer",
+          "domain": "DevOps & Infrastructure",
+          "matching_skills": [
+            "Docker",
+            "Git"
+          ],
+          "confidence_score": 4.0,
+          "role_level": "entry",
+          "missing_skills": [
+            "CI/CD pipelines, Kubernetes, cloud platforms (AWS, Azure, GCP), infrastructure as code (Terraform)"
+          ]
+        }
+      ],
+      "strongest_domain": "Software Development & Engineering",
+      "cross_domain_potential": "yes",
+      "skill_summary": null
+    },
+    "preferences": {
+      "location": "",
+      "experience_level": "entry",
+      "job_type": "full-time",
+      "remote_preference": "hybrid"
+    },
+    "created_at": "2025-07-21T16:10:39.939918",
+    "filename": "Revised-Technical-Resume-Template-Spring-2025-2 (1).pdf",
+    "file_info": null,
+    "last_analysis": null
+  },
+  "metadata": {
+    "resume_text_length": 2731,
+    "skills_count": 19,
+    "has_domain_analysis": true,
+    "has_preferences": true
+  }
+}

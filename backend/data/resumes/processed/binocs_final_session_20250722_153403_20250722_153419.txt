@@ -1,0 +1,127 @@
+Arjun Deshmukh
+# (mailto:desh.arjun3@gmail.com)  (mailto:desh.arjun3@gmail.com)desh.arjun3@gmail.com (mailto:desh.arjun3@gmail.com)
+§ (https://github.com/ZEUS33776)  (https://github.com/ZEUS33776)github.com/ZEUS33776 (https://github.com/ZEUS33776)
+ (https://portfolio-6rj9.onrender.com/)  (https://portfolio-6rj9.onrender.com/)portfolio-6rj9.onrender.com (https://portfolio-6rj9.onrender.com/)
+Ð (https://leetcode.com/u/ZEUS_7/)  (https://leetcode.com/u/ZEUS_7/)leetcode.com/u/ZEUS 7 (https://leetcode.com/u/ZEUS_7/)
+Professional Summary
+
+• Passionate software engineer with a deep interest in building scalable AI-driven systems that solve real-world problems.
+Experienced in full-stack development, machine learning, and intelligent automation using large language models and multi-agent
+frameworks. I thrive on designing systems that combine engineering rigor with the transformative potential of generative AI to
+create impactful, end-to-end solutions.
+
+Education
+
+Indian Institute of Information Technology, Kottayam
+Nov 2022 – March 2026
+Bachelor of Technology in Computer Science and Engineering
+CGPA: 9.06/10
+
+Professional Experience
+
+Xcdify Solutions Private Limited
+Dec 2024 – Present
+Software Engineering Intern (Remote)
+Bengaluru, Karnataka
+
+• Designed and implemented enterprise-level Vehicle Routing Problem (VRP) optimization algorithms serving 50+ fleet vehicles,
+achieving 20% cost reduction in transportation expenses and 35% improvement in operational efficiency through advanced routing
+algorithms.
+• Built and deployed comprehensive data analytics platform using dbt (Data Build Tool) with 10+ automated data
+transformation pipelines, improving data processing performance by 40% and enabling real-time business intelligence for
+stakeholders.
+• Developed scalable ETL workflows with 50+ SQL transformations and automated reporting systems, reducing manual data
+processing overhead by 60% while consistently meeting agile sprint deliverables.
+
+Technical Projects
+
+VCS-Core – Distributed Version Control System | Python, CLI, Cryptography, Git Protocol
+Github (https://github.com/ZEUS33776/vcs.git) | (https://github.com/ZEUS33776/vcs.git) PyPI (https://pypi.org/project/vcs-core/0.1.0/)
+
+• Developed and published open-source distributed version control system to PyPI with 100% Git compatibility, demonstrating
+advanced understanding of version control architecture and software engineering principles.
+• Implemented advanced file tracking and versioning using SHA-256 cryptographic hashing, delta compression algorithms, and tree
+data structures, achieving 40% storage optimization while maintaining 99.9% data integrity.
+• Created comprehensive command-line interface with 15+ Git-compatible commands including branching, merging, and conflict
+resolution, ensuring seamless integration with existing development workflows.
+• Achieved 220+ downloads within first week of PyPI publication, including complete documentation, unit testing, and
+continuous integration best practices.
+
+Lyfline – Machine Learning Healthcare Platform | Python, React, Node.js, PostgreSQL
+Github (https://github.com/ZEUS33776/Lyfline.git) | (https://github.com/ZEUS33776/Lyfline.git) Live Demo (https://lyfline.onrender.com/)
+
+• Engineered predictive analytics healthcare platform with 3 machine learning models achieving 87% accuracy for patient risk
+assessment and 97% accuracy for admitted patient monitoring using supervised learning algorithms.
+• Built real-time patient monitoring system with automated alert capabilities, reducing critical condition detection time by 25%
+through predictive modeling and enabling timely healthcare intervention.
+• Implemented secure healthcare database management system with PostgreSQL, featuring role-based access control and
+HIPAA-compliant data protection protocols for 1000+ patient records.
+• Created responsive web application dashboard using React with data visualization components, enabling healthcare professionals to
+make clinical decisions 40% faster through intuitive risk assessment interfaces.
+
+JobSeeker – AI-Powered Job Search Platform | LangChain, LlamaIndex, LangGraph, FastAPI, React
+Github (https://github.com/ZEUS33776/JobSeeker)
+
+• Developing comprehensive job search automation platform with resume parsing, generating 5–7 targeted search queries,
+automated job scraping and ranking of 10–20 listings, resume scoring algorithms (1–100 scale), and customized LaTeX resume
+generation.
+• Integrated LangChain for dynamic query generation, LlamaIndex for resume content indexing ( 5000 tokens), and LangGraph
++ CrewAI for multi-agent RAG pipeline orchestration enabling contextual job matching and feedback systems.
+• Architected scalable FastAPI microservices backend with responsive React frontend, leveraging large language models for
+resume parsing and optimization, improving keyword alignment by 30–40%.
+• Deployed containerized application on Google Cloud Platform with Supabase database integration, managing 100+
+real-time job metadata entries with automated data pipeline processing.
+
+Distill – AI-Powered Learning Platform | RAG, LLM, React, Vector Embeddings
+GitHub (https://github.com/ZEUS33776/Distill--AI-powered-study-assistant) | (https://github.com/ZEUS33776/Distill--AI-powered-study-assistant) Live Demo (https://distill-frontend-dj2j.onrender.com/)
+
+• Built full-stack intelligent learning platform supporting PDF and YouTube video processing with custom RAG pipeline
+implementation, vector embeddings, and large language model integration for enhanced content understanding.
+• Developed advanced content ingestion system with PDF extraction and YouTube processing capabilities, utilizing
+lama-4-scout-17b for inference and Groq for high-performance response generation, achieving 60% faster query processing.
+• Implemented comprehensive user authentication system with JWT tokens and namespace isolation, featuring performance analytics
+tracking across quiz scores, flashcard metrics, and session data for personalized learning insights.
+• Created assessment generation system with real-time performance analytics, contextual chat interactions, and comprehensive
+learning metrics, increasing user engagement by 45%.
+
+Technical Skills
+
+• Programming Languages: Python, Java, C, C++, JavaScript, SQL, Shell Scripting
+• Development Tools: Git, GitHub, Docker, CI/CD, DBT, Redis Queue, Version Control
+• Web Technologies: React.js, Node.js, Express.js, Flask, FastAPI, REST APIs, Tailwind CSS, HTML, CSS
+• System Architecture: Operating Systems, Computer Architecture, Instruction Set Architecture, CPU Pipelines, Cache Systems,
+Distributed Systems, Microservices
+• Database Technologies: PostgreSQL, MySQL, MongoDB, Redis, Database Design, Query Optimization
+• Cloud Platforms: AWS, Google Cloud Platform, Supabase, Cloud Computing, Deployment
+• Artificial Intelligence: Machine Learning, Deep Learning, Scikit-Learn, TensorFlow, Pandas, NumPy, LangChain, RAG, Natural
+Language Processing, Large Language Models, Semantic Search
+• Software Engineering: Algorithm Design, Data Structures, Competitive Programming, Code Optimization
+
+Relevant Coursework
+
+– Compiler Design
+– Database Management
+– Cloud Computing
+
+– Design and Analysis of
+Algorithms
+– Artificial Intelligence
+
+– Computer Architecture
+– Software Design Patterns
+– Data Warehousing and
+
+Mining
+– Operating Systems
+– Distributed Computing
+
+Achievements & Recognition
+
+• Maintained 1819 rating on LeetCode demonstrating advanced problem-solving capabilities and competitive programming
+expertise among top-tier software engineers.
+• Solved 390+ algorithmic problems on LeetCode and 500+ coding challenges across multiple platforms including Codeforces
+and GeeksforGeeks, showcasing strong data structures and algorithms proficiency.
+• Ranked in top 3% among 28,000 participants in LeetCode Contest 151, demonstrating exceptional competitive programming
+skills under time constraints.
+• Open Source Contribution: VCS-Core Python package achieved 320+ PyPI downloads within first week of publication,
+demonstrating software engineering excellence and community adoption.

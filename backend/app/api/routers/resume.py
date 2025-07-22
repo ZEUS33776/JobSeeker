@@ -1,7 +1,7 @@
 """
 Resume-related API endpoints
 """
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from typing import Dict, Any
 
 from app.models import (
@@ -66,13 +66,21 @@ async def score_resume_standalone(
     # Validate session exists
     session_data = ResumeController.validate_session_data(session_data)
     
+    # Get resume text and info
+    resume_text = session_data.get("resume_text", "")
+    resume_info = {
+        "Role": session_data.get("resume_info", {}).get("role", ""),
+        "Skills": session_data.get("resume_info", {}).get("skills", []),
+        "Experience": session_data.get("resume_info", {}).get("experience", "")
+    }
+    
     # Perform standalone ATS analysis using controller
-    analysis_result = ResumeController.analyze_resume_standalone(session_data)
+    analysis_result = ResumeController.analyze_resume_standalone(resume_text, resume_info)
     
     # Store analysis in session (both memory and file)
     if session_id in user_sessions:
         user_sessions[session_id]["last_standalone_analysis"] = {
-            "analysis_result": analysis_result.dict(),
+            "analysis_result": analysis_result,
             "analyzed_at": user_sessions[session_id].get("created_at")
         }
     
@@ -115,6 +123,28 @@ async def analyze_resume_vs_job(analysis_request: ResumeAnalysisRequest):
         message="Resume analysis completed successfully",
         data=analysis_result
     )
+
+@router.post("/extract-domains")
+async def extract_domains(session_id: str = Form(...)):
+    """
+    Extract domains and roles using LLM for the given session.
+    """
+    # Try to get session data from memory first
+    session_data = user_sessions.get(session_id)
+    if not session_data:
+        session_data = ResumeController.load_session_from_storage(session_id)
+        if session_data:
+            user_sessions[session_id] = session_data
+
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    resume_text = session_data.get("resume_text", "")
+    skills = session_data.get("resume_info", {}).get("skills", [])
+
+    from app.services.llm_extractor import identify_skill_domains_and_roles
+    result = identify_skill_domains_and_roles(resume_text, skills)
+    return {"success": True, "data": result}
 
 @router.get("/sessions/{session_id}")
 async def get_session_info(session_id: str):

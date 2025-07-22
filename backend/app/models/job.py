@@ -8,6 +8,23 @@ from .common import (
     BaseResponse, SuccessResponse, ExperienceLevel, 
     JobType, RemotePreference, Location
 )
+from enum import Enum
+
+class ExperienceLevel(str, Enum):
+    entry = "entry"
+    mid = "mid"
+    senior = "senior"
+
+class JobType(str, Enum):
+    full_time = "full-time"
+    part_time = "part-time"
+    contract = "contract"
+    internship = "internship"
+
+class SearchScope(str, Enum):
+    job_boards = "job_boards"  # Only major job boards (LinkedIn, Indeed, Naukri, etc.)
+    company_pages = "company_pages"  # Only company career pages
+    comprehensive = "comprehensive"  # Both job boards and company career pages
 
 # Job Search Models
 class JobSearchRequest(BaseModel):
@@ -15,6 +32,8 @@ class JobSearchRequest(BaseModel):
     additional_keywords: str = Field(default="", description="Additional search keywords")
     max_results: int = Field(default=20, ge=1, le=100, description="Maximum number of results")
     updated_skills: str = Field(default="", description="JSON string of updated skills")
+    desired_roles: str = Field(default="", description="Comma-separated list of desired job roles selected by user")
+    search_scope: SearchScope = Field(default=SearchScope.job_boards, description="Search scope: job_boards, company_pages, or comprehensive")
 
 class JobSearchQuery(BaseModel):
     query: str = Field(..., description="Search query string")

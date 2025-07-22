@@ -51,7 +51,7 @@ class DomainAnalysis(BaseModel):
     suggested_roles_detailed: List[SuggestedRole] = Field(default_factory=list)
     strongest_domain: str = ""
     cross_domain_potential: str = ""
-    skill_summary: Optional[SkillDomainSummary] = None
+    skill_domain_summary: Optional[SkillDomainSummary] = None
 
 class AISuggestions(BaseModel):
     primary_roles: List[str] = Field(default_factory=list)

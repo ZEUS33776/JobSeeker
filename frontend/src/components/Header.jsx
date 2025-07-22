@@ -11,14 +11,7 @@ const Header = () => {
           <p className="brand-subtitle">Professional Resume Analysis & Career Tools</p>
         </div>
         
-        <div className="header-actions">
-          <button className="help-btn">
-            Help
-          </button>
-          <button className="settings-btn">
-            Settings
-          </button>
-        </div>
+        {/* Remove Help and Settings buttons */}
       </div>
     </header>
   );

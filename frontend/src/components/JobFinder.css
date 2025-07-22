@@ -1,0 +1,218 @@
+/* JobFinder.css */
+.job-finder-section {
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.job-finder-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.job-finder-section h2::before {
+  content: "🎯";
+  font-size: 1.5rem;
+}
+
+/* No Resumes Message */
+.no-resumes-message {
+  text-align: center;
+  padding: 3rem;
+  background: var(--surface-elevated);
+  border-radius: var(--border-radius);
+  border: 2px dashed var(--border-color);
+  margin: 2rem 0;
+}
+
+.no-resumes-message p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.no-resumes-message .btn-primary {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Step 1: Resume Selection */
+.step-resume-select {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--surface-elevated);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.step-resume-select .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.step-resume-select label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.step-resume-select select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.step-resume-select select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Step 2: Job Search */
+.step-job-search {
+  margin-top: 1rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: var(--primary-color);
+}
+
+.back-button::before {
+  content: "←";
+  font-size: 1.2rem;
+}
+
+/* Step 3: Results */
+.step-job-results {
+  margin-top: 1rem;
+}
+
+/* Error Message */
+.error-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--border-radius);
+  color: var(--error-text);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-message::before {
+  content: "⚠️";
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.loading-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .job-finder-section {
+    padding: 1rem;
+  }
+
+  .step-resume-select {
+    padding: 1rem;
+  }
+
+  .no-resumes-message {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline {
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: rgba(var(--primary-rgb), 0.05);
+}
+
+.btn-primary {
+  color: white;
+  background: var(--primary-color);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+/* Transitions */
+.step-resume-select,
+.step-job-search,
+.step-job-results {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

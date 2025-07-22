@@ -1,9 +1,139 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from app.core.config import GEMINI_API_KEY
+import os
+import re
+import hashlib
+import json
+from typing import Dict, List, Any, Optional
+from datetime import datetime, timedelta
+
 import google.generativeai as genai
-from datetime import datetime
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.schema.output_parser import OutputParserException
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+
+from app.core.config import GEMINI_API_KEY
+
+# In-memory cache for extracted resume data
+_resume_cache = {}
+_domain_cache = {}
+
+def _generate_content_hash(content: str) -> str:
+    """Generate a hash for content to use as cache key"""
+    return hashlib.sha256(content.encode('utf-8')).hexdigest()[:16]
+
+def _is_cache_valid(cache_entry: Dict[str, Any], max_age_hours: int = 24) -> bool:
+    """Check if cache entry is still valid"""
+    if not cache_entry or 'timestamp' not in cache_entry:
+        return False
+    
+    cache_time = datetime.fromisoformat(cache_entry['timestamp'])
+    age = datetime.now() - cache_time
+    return age < timedelta(hours=max_age_hours)
+
+def _get_cached_resume_info(content: str) -> Optional[Dict[str, Any]]:
+    """Get cached resume info if available and valid"""
+    content_hash = _generate_content_hash(content)
+    if content_hash in _resume_cache:
+        cache_entry = _resume_cache[content_hash]
+        if _is_cache_valid(cache_entry):
+            print(f"[CACHE HIT] Using cached resume extraction for hash {content_hash[:8]}...")
+            return cache_entry['data']
+        else:
+            print(f"[CACHE EXPIRED] Removing expired cache for hash {content_hash[:8]}...")
+            del _resume_cache[content_hash]
+    return None
+
+def _cache_resume_info(content: str, extracted_info: Dict[str, Any]) -> None:
+    """Cache extracted resume info"""
+    content_hash = _generate_content_hash(content)
+    _resume_cache[content_hash] = {
+        'data': extracted_info,
+        'timestamp': datetime.now().isoformat(),
+        'content_preview': content[:100] + "..." if len(content) > 100 else content
+    }
+    print(f"[CACHE STORED] Cached resume extraction for hash {content_hash[:8]}...")
+
+def _get_cached_domain_analysis(content: str, skills: List[str]) -> Optional[Dict[str, Any]]:
+    """Get cached domain analysis if available and valid"""
+    # Create a combined hash for content + skills for domain analysis
+    combined_content = content + "|" + ",".join(sorted(skills))
+    content_hash = _generate_content_hash(combined_content)
+    
+    if content_hash in _domain_cache:
+        cache_entry = _domain_cache[content_hash]
+        if _is_cache_valid(cache_entry):
+            print(f"[CACHE HIT] Using cached domain analysis for hash {content_hash[:8]}...")
+            return cache_entry['data']
+        else:
+            print(f"[CACHE EXPIRED] Removing expired domain cache for hash {content_hash[:8]}...")
+            del _domain_cache[content_hash]
+    return None
+
+def _cache_domain_analysis(content: str, skills: List[str], analysis: Dict[str, Any]) -> None:
+    """Cache domain analysis"""
+    combined_content = content + "|" + ",".join(sorted(skills))
+    content_hash = _generate_content_hash(combined_content)
+    
+    _domain_cache[content_hash] = {
+        'data': analysis,
+        'timestamp': datetime.now().isoformat(),
+        'skills_count': len(skills),
+        'content_preview': content[:100] + "..." if len(content) > 100 else content
+    }
+    print(f"[CACHE STORED] Cached domain analysis for hash {content_hash[:8]}...")
+
+def clear_cache(max_age_hours: int = 0) -> Dict[str, int]:
+    """Clear old cache entries or all if max_age_hours=0"""
+    global _resume_cache, _domain_cache
+    
+    removed_counts = {'resume_cache': 0, 'domain_cache': 0}
+    
+    if max_age_hours == 0:
+        # Clear all
+        removed_counts['resume_cache'] = len(_resume_cache)
+        removed_counts['domain_cache'] = len(_domain_cache)
+        _resume_cache.clear()
+        _domain_cache.clear()
+        print("[CACHE] Cleared all cache entries")
+    else:
+        # Clear expired entries
+        current_time = datetime.now()
+        
+        # Clear expired resume cache
+        expired_resume_keys = []
+        for key, entry in _resume_cache.items():
+            if not _is_cache_valid(entry, max_age_hours):
+                expired_resume_keys.append(key)
+        
+        for key in expired_resume_keys:
+            del _resume_cache[key]
+            removed_counts['resume_cache'] += 1
+        
+        # Clear expired domain cache
+        expired_domain_keys = []
+        for key, entry in _domain_cache.items():
+            if not _is_cache_valid(entry, max_age_hours):
+                expired_domain_keys.append(key)
+        
+        for key in expired_domain_keys:
+            del _domain_cache[key]
+            removed_counts['domain_cache'] += 1
+        
+        print(f"[CACHE] Removed {removed_counts['resume_cache']} resume cache and {removed_counts['domain_cache']} domain cache entries")
+    
+    return removed_counts
+
+def get_cache_stats() -> Dict[str, Any]:
+    """Get cache statistics"""
+    return {
+        'resume_cache_size': len(_resume_cache),
+        'domain_cache_size': len(_domain_cache),
+        'total_cache_entries': len(_resume_cache) + len(_domain_cache),
+        'resume_cache_keys': list(_resume_cache.keys()),
+        'domain_cache_keys': list(_domain_cache.keys())
+    }
+
+# Domain Analysis Prompt Template
 
 def identify_skill_domains_and_roles(resume_content: str, extracted_skills: list) -> dict:
     """
@@ -19,10 +149,20 @@ def identify_skill_domains_and_roles(resume_content: str, extracted_skills: list
     try:
         if not resume_content or not extracted_skills:
             return {
-                "domains": [],
+                "identified_domains": [],
                 "suggested_roles": [],
+                "primary_role_recommendations": [],
+                "secondary_role_options": [],
+                "skill_domain_summary": {},
                 "role_mapping": {}
             }
+        
+        # Check cache first
+        cached_analysis = _get_cached_domain_analysis(resume_content, extracted_skills)
+        if cached_analysis:
+            return cached_analysis
+        
+        print(f"[DOMAIN ANALYSIS] Processing new domain analysis (cache miss)...")
         
         # Create skill domain analysis prompt
         domain_analysis_prompt = ChatPromptTemplate.from_messages([
@@ -109,6 +249,19 @@ Analyze the following resume content and skills to identify which tech domains t
 - Tech Support Engineer
 - Sales Engineer / Solutions Engineer
 
+**Fallback/General Tech Domains (use these if no strong match above and add a few of your own which are also relevant but not mentioned):**
+- QA Engineer
+- Technical Support Engineer
+- Product Manager
+- Business Analyst
+- IT Consultant
+- Systems Administrator
+- Project Coordinator
+- UI/UX Designer
+- Network Engineer
+- Sales Engineer
+- General IT/Tech Roles
+
 **Your Task:**
 1. **Domain Identification**: Map the candidate's skills to the most relevant tech domains above
 2. **Role Matching**: Identify 3-7 specific job roles that best match their skill profile
@@ -121,6 +274,17 @@ Analyze the following resume content and skills to identify which tech domains t
 - Prioritize roles where they have 60%+ of required skills
 - Include both primary and secondary role options
 - Consider experience level from resume content
+- If the skills do not align with any of the main domains above, you MUST pick from the Fallback/General Tech Domains above, and suggest the most relevant domain(s) and roles where jobs exist for those skills, even if the match is weak or partial. Do NOT return an empty list. Always return at least one domain and 2+ roles that exist in the job market.
+
+**Example:**
+If the candidate's skills are ['Excel', 'Customer Service', 'Documentation'], you might return:
+"identified_domains": [
+  {{"domain": "General Tech & IT", "matching_skills": ["Excel", "Documentation"], "confidence": "low"}}
+],
+"suggested_roles": [
+  {{"role": "Technical Support Engineer", "domain": "General Tech & IT", "matching_skills": ["Customer Service", "Documentation"], "confidence_score": 5, "role_level": "entry", "missing_skills": ["IT troubleshooting"]}},
+  {{"role": "Project Coordinator", "domain": "General Tech & IT", "matching_skills": ["Documentation"], "confidence_score": 4, "role_level": "entry", "missing_skills": ["Project Management"]}}
+]
 
 **Response Format (JSON only):**
 {{
@@ -153,8 +317,6 @@ Analyze the following resume content and skills to identify which tech domains t
         "cross_domain_potential": "Whether they can work across multiple domains"
     }}
 }}
-
-Respond with ONLY the JSON, no other text.
 """)
         ])
         
@@ -178,23 +340,28 @@ Respond with ONLY the JSON, no other text.
         print(f"[DOMAIN ANALYSIS] Primary roles identified: {primary_roles}")
         print(f"[DOMAIN ANALYSIS] Secondary roles identified: {secondary_roles}")
         
-        return {
-            "domains": domain_result.get("identified_domains", []),
+        result = {
+            "identified_domains": domain_result.get("identified_domains", []),  # Changed from "domains"
             "suggested_roles": domain_result.get("suggested_roles", []),
-            "primary_roles": primary_roles,
-            "secondary_roles": secondary_roles,
-            "skill_summary": domain_result.get("skill_domain_summary", {}),
+            "primary_role_recommendations": primary_roles,  # Changed from "primary_roles"
+            "secondary_role_options": secondary_roles,  # Changed from "secondary_roles"
+            "skill_domain_summary": domain_result.get("skill_domain_summary", {}),  # Changed from "skill_summary"
             "role_mapping": domain_result
         }
+        
+        # Cache the result
+        _cache_domain_analysis(resume_content, extracted_skills, result)
+        
+        return result
         
     except Exception as e:
         print(f"[DOMAIN ANALYSIS ERROR] {type(e).__name__}: {str(e)}")
         return {
-            "domains": [],
+            "identified_domains": [],  # Changed from "domains"
             "suggested_roles": [],
-            "primary_roles": [],
-            "secondary_roles": [],
-            "skill_summary": {},
+            "primary_role_recommendations": [],  # Changed from "primary_roles"
+            "secondary_role_options": [],  # Changed from "secondary_roles"
+            "skill_domain_summary": {},  # Changed from "skill_summary"
             "role_mapping": {}
         }
 
@@ -216,6 +383,13 @@ def extract_resume_info(resume_content: str) -> dict:
                 "Skills": [],
                 "Experience": ""
             }
+        
+        # Check cache first
+        cached_info = _get_cached_resume_info(resume_content)
+        if cached_info:
+            return cached_info
+        
+        print(f"[RESUME ANALYSIS] Processing new resume content (cache miss)...")
         
         # Create a proper resume analysis prompt to determine role from content
         resume_analysis_prompt = ChatPromptTemplate.from_messages([
@@ -266,11 +440,16 @@ Respond with ONLY the JSON, no other text.
         print(f"[RESUME ANALYSIS] Detected Skills: {skills[:5]}...")  # Show first 5 skills
         print(f"[RESUME ANALYSIS] Experience Level: {experience_level}")
         
-        return {
+        result = {
             "Role": target_role,
             "Skills": skills,
             "Experience": experience_level
         }
+        
+        # Cache the result
+        _cache_resume_info(resume_content, result)
+        
+        return result
         
     except Exception as e:
         print(f"[EXTRACT_RESUME_INFO ERROR] {type(e).__name__}: {str(e)}")
@@ -513,8 +692,8 @@ def extract_keywords_from_llm(resume: str, role: str, min_salary: int = None, lo
         domain_analysis = identify_skill_domains_and_roles(resume, extracted_skills)
         
         # Step 3: Combine user role with AI-suggested roles
-        primary_roles = domain_analysis.get("primary_roles", [])
-        secondary_roles = domain_analysis.get("secondary_roles", [])
+        primary_roles = domain_analysis.get("primary_role_recommendations", [])
+        secondary_roles = domain_analysis.get("secondary_role_options", [])
         
         # Create enhanced role list for search queries
         enhanced_roles = [role]  # Start with user-specified role
@@ -560,7 +739,7 @@ def extract_keywords_from_llm(resume: str, role: str, min_salary: int = None, lo
             "format_instructions": parser.get_format_instructions(),
             "suggested_roles": unique_roles,  # Pass all suggested roles
             "primary_skills": extracted_skills[:5],  # Top 5 skills
-            "domain_info": domain_analysis.get("skill_summary", {})
+            "domain_info": domain_analysis.get("skill_domain_summary", {})
         }
 
         result = chain.invoke(chain_input)
@@ -615,12 +794,12 @@ def extract_keywords_from_llm(resume: str, role: str, min_salary: int = None, lo
         if isinstance(result, dict):
             result["domain_analysis"] = domain_analysis
             result["enhanced_roles"] = unique_roles
-            result["skill_domains"] = domain_analysis.get("domains", [])
+            result["skill_domains"] = domain_analysis.get("identified_domains", []) # Changed from "domains"
             result["resume_insights"] = {
                 "extracted_skills": extracted_skills,
                 "target_role": resume_info.get("Role", ""),
                 "experience_level": resume_info.get("Experience", ""),
-                "strongest_domain": domain_analysis.get("skill_summary", {}).get("strongest_domain", ""),
+                "strongest_domain": domain_analysis.get("skill_domain_summary", {}).get("strongest_domain", ""),
                 "ai_confidence": len(primary_roles) > 0  # Has AI suggested roles
             }
 
@@ -755,19 +934,6 @@ def analyze_resume_vs_job_description(resume_text: str, resume_info: dict, job_d
         dict: Detailed analysis including strengths, weaknesses, missing keywords, ATS score
     """
     try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        from langchain_core.prompts import ChatPromptTemplate
-        from langchain_core.output_parsers import JsonOutputParser
-        
-        # Initialize LLM and parser
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
-            temperature=0.1,
-            max_tokens=8000,
-            google_api_key=GEMINI_API_KEY
-        )
-        parser = JsonOutputParser()
-        
         # Create comprehensive ATS analysis prompt using the advanced evaluation framework
         ats_analysis_prompt = ChatPromptTemplate.from_messages([
             ("system", """You are an advanced Applicant Tracking System (ATS) resume evaluator designed to simulate how modern hiring systems analyze and score resumes for relevance, quality, and presentation. Your job is to evaluate resumes and provide detailed assessment of their effectiveness based on industry best practices."""),
@@ -971,10 +1137,6 @@ def analyze_resume_standalone(resume_text: str, resume_info: dict) -> dict:
         dict: Detailed analysis including strengths, weaknesses, ATS score
     """
     try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        from langchain_core.prompts import ChatPromptTemplate
-        from langchain_core.output_parsers import JsonOutputParser
-        
         # Initialize LLM and parser
         llm = ChatGoogleGenerativeAI(
             model="gemini-1.5-flash",

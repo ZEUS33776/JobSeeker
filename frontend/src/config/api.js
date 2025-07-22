@@ -85,6 +85,7 @@ export const API_ENDPOINTS = {
   uploadResume: () => buildApiUrl(apiConfig.endpoints.uploadResume),
   analyzeResumeVsJob: () => buildApiUrl(apiConfig.endpoints.analyzeResumeVsJob),
   scoreResumeStandalone: () => buildApiUrl(apiConfig.endpoints.scoreResumeStandalone),
+  analyzeResume: (sessionId) => buildApiUrl(`${apiConfig.endpoints.scoreResumeStandalone}?session_id=${sessionId}`),
   
   // Resume Builder endpoints
   resumeBuilderTemplates: () => buildApiUrl(apiConfig.endpoints.resumeBuilderTemplates),

@@ -75,12 +75,12 @@ class ResumeController:
             
             # Convert to Pydantic model
             domain_analysis = DomainAnalysis(
-                primary_roles=domain_analysis_raw.get("primary_roles", []),
-                secondary_roles=domain_analysis_raw.get("secondary_roles", []),
-                skill_domains=domain_analysis_raw.get("domains", []),
+                primary_roles=domain_analysis_raw.get("primary_role_recommendations", []),
+                secondary_roles=domain_analysis_raw.get("secondary_role_options", []),
+                skill_domains=domain_analysis_raw.get("identified_domains", []),
                 suggested_roles_detailed=domain_analysis_raw.get("suggested_roles", []),
-                strongest_domain=domain_analysis_raw.get("skill_summary", {}).get("strongest_domain", ""),
-                cross_domain_potential=domain_analysis_raw.get("skill_summary", {}).get("cross_domain_potential", "")
+                strongest_domain=domain_analysis_raw.get("skill_domain_summary", {}).get("strongest_domain", ""),
+                cross_domain_potential=domain_analysis_raw.get("skill_domain_summary", {}).get("cross_domain_potential", "")
             )
             
             # Create user preferences
@@ -131,16 +131,16 @@ class ResumeController:
             raise HTTPException(status_code=500, detail=f"Error processing resume: {str(e)}")
     
     @staticmethod
-    def analyze_resume_standalone(session_data: Dict[str, Any]) -> ATSAnalysisResult:
+    def analyze_resume_standalone(resume_text: str, resume_info: Dict[str, Any]) -> ATSAnalysisResult:
         """Analyze resume against general ATS standards"""
         try:
-            # Extract resume text from session data
-            resume_text = session_data.get("resume_text", "")
+            # Validate inputs
             if not resume_text:
-                raise HTTPException(status_code=400, detail="No resume text found in session")
+                raise HTTPException(status_code=400, detail="No resume text provided")
             
             # Perform standalone ATS analysis
-            analysis_result = analyze_resume_standalone(resume_text)
+            from app.services.llm_extractor import analyze_resume_standalone
+            analysis_result = analyze_resume_standalone(resume_text, resume_info)
             
             return analysis_result
             

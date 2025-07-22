@@ -19,6 +19,8 @@ class JobRanker:
             )
             self.parser = JsonOutputParser()
             self._setup_prompt_template()
+            # Create the LLM chain after prompt is set up
+            self.llm_chain = self.ranking_prompt | self.llm | self.parser
         except Exception as e:
             logger.error(f"Failed to initialize JobRanker: {e}")
             raise
@@ -33,34 +35,40 @@ class JobRanker:
             If a job has no skill matches and doesn't align with the candidate's role/variants, DO NOT include it in the results."""),
             ("human", """
 Rank these job search results based on how well they match the candidate's profile.
+Return ONLY the top {max_results_requested} most relevant jobs.
 
 CANDIDATE PROFILE:
 Skills: {skills}
-Preferred Role: {role}
-Role Variants: {role_variants}
+Original Role: {role}
+PRIORITIZED ROLES (User Selected): {role_variants}
 
 JOB SEARCH RESULTS:
 {job_results}
 
 STRICT FILTERING CRITERIA:
-- ONLY include jobs that have at least ONE skill match OR role alignment
+- FIRST PRIORITY: Match the user's selected/prioritized roles ({role_variants})
+- SECOND PRIORITY: Match skills and experience level
 - If seeking tech roles, ONLY include tech-related positions
 - If NO skills match and role doesn't align, EXCLUDE the job completely
 - Minimum threshold: Job must score at least 50 points to be included
 
 RANKING CRITERIA (for jobs that pass filtering):
-1. Skill Match (40%): How many candidate skills are relevant to the job
-2. Role Alignment (30%): How well the job title matches preferred role/variants  
-3. Job Quality (20%): Based on company reputation, job description quality
-4. Relevance (10%): Overall relevance to candidate's career goals
+1. ROLE ALIGNMENT (50%): How well the job matches the user's SELECTED roles ({role_variants}) - THIS IS MOST IMPORTANT
+2. Skill Match (30%): How many candidate skills are relevant to the job
+3. Job Quality (15%): Based on company reputation, job description quality
+4. Career Relevance (5%): Overall relevance to candidate's career goals
 
 SCORING SCALE:
-- 90-100: Excellent match (dream job)
-- 80-89: Very good match (strong candidate) 
-- 70-79: Good match (suitable)
-- 60-69: Fair match (consider)
+- 90-100: Excellent match (perfect role + skills match)
+- 80-89: Very good match (strong role alignment + good skills) 
+- 70-79: Good match (role matches + some skills)
+- 60-69: Fair match (partial role match + skills)
 - 50-59: Minimum acceptable match
 - Below 50: EXCLUDE from results
+
+CRITICAL: If the user selected specific roles (like AI/ML roles), heavily prioritize jobs that match those roles even if they don't perfectly match the original resume role.
+
+IMPORTANT: Return ONLY the top {max_results_requested} jobs, ranked by score (highest first).
 
 Respond with ONLY this JSON structure (no other text):
 {{
@@ -85,7 +93,8 @@ Respond with ONLY this JSON structure (no other text):
 }}
 
 Role match values: "exact", "close", "partial", "weak"
-Only rank jobs that are genuinely relevant. Order by score (highest first).""")
+Only rank the most relevant jobs. Maximum {max_results_requested} jobs in ranked_jobs array.
+        """)
         ])
 
     def rank_jobs(self, parsed_info: Dict[str, Any], search_results: Dict[str, Any]) -> Dict[str, Any]:
@@ -117,6 +126,9 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
                 }
             
             # Prepare data for LLM - handle both old and new format
+            print(f"[RANKER DEBUG] parsed_info keys: {list(parsed_info.keys())}")
+            print(f"[RANKER DEBUG] parsed_info.Skills: {parsed_info.get('Skills', 'NOT_FOUND')}")
+            
             skills_data = parsed_info.get("Skills", [])
             if isinstance(skills_data, list):
                 skills = skills_data  # Old format
@@ -128,8 +140,25 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
                 else:
                     skills = []
             
+            # If still no skills, try alternative keys
+            if not skills:
+                # Try other possible skill keys
+                alt_skills = parsed_info.get("skills", []) or parsed_info.get("technical_skills", [])
+                if alt_skills:
+                    skills = alt_skills if isinstance(alt_skills, list) else []
+                    print(f"[RANKER DEBUG] Found skills in alternative key: {skills[:5]}...")
+            
+            print(f"[RANKER DEBUG] Final skills extracted: {skills[:10]}...")  # Show first 10 skills
+            
             role = parsed_info.get("Role", "")
             role_variants = parsed_info.get("Role_Variants", [])
+            desired_roles = parsed_info.get("Desired_Roles", "")
+            
+            # Debug logging for role selection
+            print(f"[RANKER DEBUG] Original role: {role}")
+            print(f"[RANKER DEBUG] Role variants: {role_variants}")
+            print(f"[RANKER DEBUG] Desired roles: {desired_roles}")
+            print(f"[RANKER DEBUG] Skills: {skills[:5]}...")  # First 5 skills
             
             # Pre-filter jobs using basic relevance check
             pre_filtered_jobs = self._pre_filter_jobs(job_listings, skills, role, role_variants, parsed_info)
@@ -147,45 +176,90 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
                     }
                 }
             
-            # Format job results for the prompt
+            # Get max_results from parsed_info if available, otherwise default to 20
+            max_results = parsed_info.get("max_results", 20)
+            logger.info(f"Limiting results to {max_results} jobs as requested")
+            
+            # If we have too many pre-filtered jobs, take a diverse sample
+            if len(pre_filtered_jobs) > max_results * 2:
+                # Take top jobs from different sources to ensure diversity
+                source_jobs = {}
+                for job in pre_filtered_jobs:
+                    source = job.get('source', 'unknown')
+                    if source not in source_jobs:
+                        source_jobs[source] = []
+                    source_jobs[source].append(job)
+                
+                # Take proportionally from each source
+                sampled_jobs = []
+                jobs_per_source = max(1, (max_results * 2) // len(source_jobs))
+                
+                for source, jobs in source_jobs.items():
+                    sampled_jobs.extend(jobs[:jobs_per_source])
+                    if len(sampled_jobs) >= max_results * 2:
+                        break
+                
+                pre_filtered_jobs = sampled_jobs[:max_results * 2]
+                logger.info(f"Sampled {len(pre_filtered_jobs)} diverse jobs from {len(source_jobs)} sources")
+            
+            # Format jobs for LLM prompt
             formatted_jobs = self._format_jobs_for_prompt(pre_filtered_jobs)
             
-            # Create the prompt
-            prompt = self.ranking_prompt.format(
-                skills=", ".join(skills),
-                role=role,
-                role_variants=", ".join(role_variants),
-                job_results=formatted_jobs
-            )
+            # Call LLM for ranking with max_results context
+            # Combine role variants and desired roles for better matching
+            all_roles = []
+            if desired_roles and desired_roles.strip():
+                desired_roles_list = [r.strip() for r in desired_roles.split(",") if r.strip()]
+                all_roles.extend(desired_roles_list)
+            if role_variants:
+                all_roles.extend(role_variants)
+            if role and role not in all_roles:
+                all_roles.append(role)
             
-            # Get ranking from LLM
-            response = self.llm.invoke(prompt)
+            ranking_response = self.llm_chain.invoke({
+                "skills": ", ".join(skills),
+                "role": role,
+                "role_variants": ", ".join(all_roles),
+                "job_results": formatted_jobs,
+                "max_results_requested": max_results
+            })
             
             # Parse the response
-            try:
-                logger.debug(f"Raw LLM response: {response.content[:500]}...")  # Log first 500 chars
+            if isinstance(ranking_response, dict):
+                ranked_jobs = ranking_response.get("ranked_jobs", [])
+                summary = ranking_response.get("summary", {})
                 
-                # Clean the response content (remove any markdown formatting if present)
-                content = response.content.strip()
-                if content.startswith('```json'):
-                    content = content[7:]  # Remove ```json
-                if content.endswith('```'):
-                    content = content[:-3]  # Remove closing ```
-                content = content.strip()
+                # Apply max_results limit to final results
+                if len(ranked_jobs) > max_results:
+                    ranked_jobs = ranked_jobs[:max_results]
+                    logger.info(f"Limited final results to {max_results} top-ranked jobs")
                 
-                ranked_result = json.loads(content)
+                # Update summary with actual counts
+                summary.update({
+                    "total_jobs": len(job_listings),
+                    "filtered_jobs": len(pre_filtered_jobs),
+                    "final_ranked": len(ranked_jobs),
+                    "max_requested": max_results
+                })
                 
-                # Add filtered_jobs count to summary
-                if "summary" in ranked_result:
-                    ranked_result["summary"]["filtered_jobs"] = len(ranked_result.get("ranked_jobs", []))
+                logger.info(f"Job ranking completed: {len(ranked_jobs)} ranked jobs returned")
                 
-                logger.info(f"Successfully ranked {len(ranked_result.get('ranked_jobs', []))} jobs out of {len(job_listings)} total")
-                return ranked_result
-            except json.JSONDecodeError as e:
-                logger.error(f"Failed to parse LLM response as JSON: {e}")
-                logger.error(f"LLM response content: {response.content}")
-                # Fallback: return filtered results with basic scoring
-                return self._fallback_ranking(pre_filtered_jobs, parsed_info, len(job_listings))
+                return {
+                    "ranked_jobs": ranked_jobs,
+                    "summary": summary
+                }
+            else:
+                logger.error("Invalid response format from LLM ranking")
+                return {
+                    "ranked_jobs": [],
+                    "summary": {
+                        "total_jobs": len(job_listings),
+                        "filtered_jobs": len(pre_filtered_jobs),
+                        "final_ranked": 0,
+                        "max_requested": max_results,
+                        "error": "Invalid LLM response format"
+                    }
+                }
                 
         except Exception as e:
             logger.error(f"Error in job ranking: {e}")
@@ -206,14 +280,27 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
         role_lower = role.lower() if role else ""
         role_variants_lower = [rv.lower() for rv in role_variants]
         
-        # Define tech-related keywords for better filtering
+        # Define general tech-related keywords for better filtering
         tech_keywords = {
             'developer', 'engineer', 'programmer', 'software', 'data', 'analyst', 'scientist',
             'devops', 'frontend', 'backend', 'fullstack', 'mobile', 'web', 'cloud',
             'python', 'java', 'javascript', 'react', 'angular', 'node', 'sql', 'database',
-            'machine learning', 'ai', 'artificial intelligence', 'cybersecurity', 'network',
-            'system', 'admin', 'architect', 'tech', 'technology', 'intern', 'internship'
+            'cybersecurity', 'network', 'system', 'admin', 'architect', 'tech', 'technology', 
+            'intern', 'internship', 'manager', 'lead', 'senior', 'junior'
         }
+        
+        # Extract keywords dynamically from user's selected roles
+        user_role_keywords = set()
+        all_user_roles = [role_lower] + role_variants_lower if role_lower else role_variants_lower
+        
+        for user_role in all_user_roles:
+            if user_role:
+                # Split role into individual words and add them as keywords
+                words = user_role.replace(',', ' ').replace('(', ' ').replace(')', ' ').split()
+                for word in words:
+                    clean_word = word.strip().lower()
+                    if len(clean_word) > 2:  # Only add words longer than 2 characters
+                        user_role_keywords.add(clean_word)
         
         # Check if candidate is looking for tech roles
         is_tech_candidate = any(keyword in (role_lower + " " + " ".join(role_variants_lower)) for keyword in tech_keywords)
@@ -230,6 +317,11 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
             wants_senior_roles = user_experience == "senior"
             wants_internships = user_job_type == "internship" or "intern" in role_lower
         
+        print(f"[PRE-FILTER DEBUG] Skills count: {len(skills)}")
+        print(f"[PRE-FILTER DEBUG] Role variants: {role_variants_lower}")
+        print(f"[PRE-FILTER DEBUG] Extracted role keywords: {list(user_role_keywords)}")
+        print(f"[PRE-FILTER DEBUG] Is tech candidate: {is_tech_candidate}")
+        
         for job in job_listings:
             title_lower = job['title'].lower()
             snippet_lower = job['snippet'].lower()
@@ -238,17 +330,30 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
             # Check for skill matches
             skill_matches = [skill for skill in skills_lower if skill in combined_text]
             
-            # Check for role alignment
+            # Enhanced role alignment check
             role_match = False
+            
+            # Check exact role match in title
             if role_lower and role_lower in title_lower:
                 role_match = True
-            elif any(variant in title_lower for variant in role_variants_lower):
+            
+            # Check role variants in title (more flexible matching)
+            elif any(variant in title_lower for variant in role_variants_lower if variant):
                 role_match = True
+            
+            # Check for user's role keywords in job title and content
+            elif user_role_keywords:
+                keyword_matches = sum(1 for keyword in user_role_keywords if keyword in combined_text)
+                # If at least 1 role keyword matches, consider it a role match
+                if keyword_matches >= 1:
+                    role_match = True
+                    print(f"[PRE-FILTER DEBUG] Role keyword match found for: {job['title'][:50]}... (matched {keyword_matches} keywords)")
             
             # For tech candidates, ensure the job is tech-related
             if is_tech_candidate:
                 is_tech_job = any(keyword in combined_text for keyword in tech_keywords)
                 if not is_tech_job:
+                    print(f"[PRE-FILTER DEBUG] Filtered out non-tech job: {job['title'][:50]}...")
                     continue  # Skip non-tech jobs for tech candidates
             
             # Filter based on experience level preferences
@@ -257,21 +362,34 @@ Only rank jobs that are genuinely relevant. Order by score (highest first).""")
             
             # Skip internships if user wants senior roles
             if wants_senior_roles and job_is_internship:
-                logger.debug(f"Filtered out internship for senior candidate: {job['title'][:50]}...")
+                print(f"[PRE-FILTER DEBUG] Filtered out internship for senior candidate: {job['title'][:50]}...")
                 continue
                 
             # Skip senior roles if user specifically wants internships
             if wants_internships and not job_is_internship and job_is_senior:
-                logger.debug(f"Filtered out senior role for internship candidate: {job['title'][:50]}...")
+                print(f"[PRE-FILTER DEBUG] Filtered out senior role for internship candidate: {job['title'][:50]}...")
                 continue
             
-            # Include job if it has skill matches OR role alignment
-            if skill_matches or role_match:
-                filtered_jobs.append(job)
-                logger.debug(f"Included job: {job['title'][:50]}... (Skills: {len(skill_matches)}, Role: {role_match})")
+            # More lenient inclusion criteria:
+            # Include job if it has skill matches OR role alignment OR matches user's role keywords
+            include_job = False
+            
+            if skill_matches:
+                include_job = True
+                print(f"[PRE-FILTER DEBUG] Included job (skill match): {job['title'][:50]}... Skills: {skill_matches}")
+            elif role_match:
+                include_job = True
+                print(f"[PRE-FILTER DEBUG] Included job (role match): {job['title'][:50]}...")
+            elif user_role_keywords and any(keyword in combined_text for keyword in user_role_keywords):
+                include_job = True
+                print(f"[PRE-FILTER DEBUG] Included job (role keyword relevance): {job['title'][:50]}...")
             else:
-                logger.debug(f"Filtered out job: {job['title'][:50]}... (no relevance)")
+                print(f"[PRE-FILTER DEBUG] Filtered out job (no relevance): {job['title'][:50]}...")
+            
+            if include_job:
+                filtered_jobs.append(job)
         
+        print(f"[PRE-FILTER DEBUG] Pre-filtered {len(filtered_jobs)} relevant jobs out of {len(job_listings)} total")
         logger.info(f"Pre-filtered {len(filtered_jobs)} relevant jobs out of {len(job_listings)} total")
         return filtered_jobs
 

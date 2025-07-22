@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { API_ENDPOINTS } from '../config/api.js';
+import './JobResults.css';
 
 const JobResults = ({ jobResults, sessionData, onBackToSearch, loading, setLoading }) => {
   const [expandedJobs, setExpandedJobs] = useState(new Set());
@@ -236,7 +237,6 @@ const JobResults = ({ jobResults, sessionData, onBackToSearch, loading, setLoadi
         <div className="results-header">
           <div className="header-main">
             <h2 className="results-title">
-              <span className="results-icon">🎯</span>
               Your Job Matches
             </h2>
             <button 

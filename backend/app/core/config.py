@@ -5,7 +5,7 @@ load_dotenv()
 
 # API keys with fallback values for development
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY", "")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 PORT = os.getenv("PORT", 8000)
 SERPER_API_KEY = os.getenv("SERPER_API_KEY", "")
 
@@ -16,8 +16,8 @@ def validate_api_keys():
     
     if not GEMINI_API_KEY:
         missing_keys.append("GEMINI_API_KEY")
-    if not CLAUDE_API_KEY:
-        missing_keys.append("CLAUDE_API_KEY")
+    if not ANTHROPIC_API_KEY:
+        missing_keys.append("ANTHROPIC_API_KEY")
     if not SERPER_API_KEY:
         missing_keys.append("SERPER_API_KEY")
     
@@ -27,7 +27,8 @@ class Settings:
     APP_NAME: str = "JobSeeker"
     APP_VERSION: str = "1.0.0"
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    CLAUDE_API_KEY: str = os.getenv("CLAUDE_API_KEY", "")
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     SERPER_API_KEY: str = os.getenv("SERPER_API_KEY", "")
-
+print(ANTHROPIC_API_KEY)
+print(GEMINI_API_KEY)
 settings = Settings()
